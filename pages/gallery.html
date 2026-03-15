@@ -1,1 +1,24 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #FFF9E6; margin:0; }
+        h1 { color: #FF6B6B; border-bottom: 3px solid #FFD93D; padding-bottom:10px; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .photo { background: #f0f0f0; height: 200px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #999; background-size: cover; background-position: center; }
+        .photo img { max-width:100%; max-height:100%; object-fit: cover; border-radius: 12px; }
+        .caption { text-align: center; color: #2C1810; margin-top: 5px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>🖼️ 图鉴</h1>
+    <div class="gallery">
+        <div class="photo" style="background-image: url('https://via.placeholder.com/200?text=杂志照');">杂志照</div>
+        <div class="photo" style="background-image: url('https://via.placeholder.com/200?text=舞台照');">舞台照</div>
+        <div class="photo" style="background-image: url('https://via.placeholder.com/200?text=活动照');">活动照</div>
+        <!-- 替换为真实图片链接，图片放在 images/ 中，如 background-image: url('../images/photo1.jpg'); -->
+    </div>
+    <p style="color:#999; text-align:center; margin-top:30px;">图片持续更新中...</p>
+</body>
+</html>
