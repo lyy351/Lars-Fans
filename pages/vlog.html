@@ -1,29 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄子弘凡 · Vlog合集</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #FFF9E6; margin:0; }
-        h1 { color: #FF6B6B; border-bottom: 3px solid #FFD93D; padding-bottom:10px; }
-        .vlog-item { margin-bottom: 30px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .vlog-date { color: #FF8A5C; font-weight: bold; }
-        .video-placeholder { background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: #999; border-radius: 8px; }
-        /* 微博嵌入代码示例：直接复制微博的iframe即可 */
+        /* 与主站一致的暖色调 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #FFF9E6;  /* 与卡片背景相同 */
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .vlog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #FF6B6B;
+            border-bottom: 3px solid #FFD93D;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        /* 视频网格：默认一行两个（电脑） */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        /* 手机：一行一个 */
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 视频卡片样式 */
+        .video-card {
+            background: #FFF1E0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(255,107,107,0.15);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* 视频区域（嵌入微博iframe） */
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16 / 9;  /* 保持16:9比例 */
+            background: #2C1810;    /* 深色背景占位 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD93D;
+            font-size: 14px;
+        }
+        .video-player iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* 视频信息 */
+        .video-info {
+            padding: 15px;
+            border-top: 3px solid #FFD93D;
+        }
+        .video-title {
+            font-weight: bold;
+            color: #2C1810;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .video-date {
+            color: #FF8A5C;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .video-desc {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 占位提示（实际使用时可删除或隐藏） */
+        .placeholder-note {
+            background: #FFE8D6;
+            color: #2C1810;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px dashed #FF8A5C;
+        }
     </style>
 </head>
 <body>
-    <h1>📹 每周Vlog</h1>
-    <div class="vlog-item">
-        <div class="vlog-date">2026.03.15</div>
-        <p>标题：这周去了哪里？</p>
-        <!-- 在这里粘贴微博视频的iframe代码 -->
-        <div class="video-placeholder">微博视频嵌入处<br>（替换为实际iframe）</div>
+    <div class="vlog-container">
+        <h1>📹 黄子弘凡 · 每周Vlog</h1>
+
+        <!-- 视频网格 -->
+        <div class="video-grid" id="videoGrid">
+            <!-- 视频卡片 1 -->
+            <div class="video-card">
+                <div class="video-player">
+                    <!-- 在这里粘贴微博视频的iframe代码，例如：
+                    <iframe src="https://video.weibo.com/player/..."></iframe>
+                    -->
+                    <span style="color: #aaa;">微博视频占位</span>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">📽️ 这周的后台日常</div>
+                    <div class="video-date">📅 2026.03.15</div>
+                    <div class="video-desc">彩排小花絮，还有神秘嘉宾出现～</div>
+                </div>
+            </div>
+
+            <!-- 视频卡片 2 -->
+            <div class="video-card">
+                <div class="video-player">
+                    <!-- 替换为实际微博iframe -->
+                    <span style="color: #aaa;">微博视频占位</span>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">🎵 新歌试唱片段</div>
+                    <div class="video-date">📅 2026.03.08</div>
+                    <div class="video-desc">第一次在Vlog里唱新歌，听听看！</div>
+                </div>
+            </div>
+
+            <!-- 视频卡片 3 -->
+            <div class="video-card">
+                <div class="video-player">
+                    <span style="color: #aaa;">微博视频占位</span>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">🍳 美食Vlog：自己做晚饭</div>
+                    <div class="video-date">📅 2026.03.01</div>
+                    <div class="video-desc">厨房首秀，猜猜成功了吗？</div>
+                </div>
+            </div>
+
+            <!-- 视频卡片 4 -->
+            <div class="video-card">
+                <div class="video-player">
+                    <span style="color: #aaa;">微博视频占位</span>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">🎤 演唱会后台准备</div>
+                    <div class="video-date">📅 2026.02.22</div>
+                    <div class="video-desc">上台前的紧张与兴奋</div>
+                </div>
+            </div>
+
+            <!-- 继续添加更多卡片，每增加两个，电脑上会自动换行 -->
+        </div>
+
+        <!-- 使用说明（可删除） -->
+        <div class="placeholder-note">
+            ⚡ 每个视频块中的灰色区域请替换为微博视频的 iframe 代码。<br>
+            示例：<code>&lt;iframe src="https://video.weibo.com/player/...">&lt;/iframe></code>
+        </div>
     </div>
-    <div class="vlog-item">
-        <div class="vlog-date">2026.03.08</div>
-        <p>标题：后台花絮</p>
-        <div class="video-placeholder">微博视频嵌入处</div>
-    </div>
-    <!-- 更多Vlog条目... -->
 </body>
 </html>
