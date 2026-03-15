@@ -1,1 +1,37 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #FFF9E6; margin:0; }
+        h1 { color: #FF6B6B; border-bottom: 3px solid #FFD93D; padding-bottom:10px; }
+        .timeline-container { display: flex; gap: 30px; margin-top: 20px; }
+        .left, .right { flex: 1; }
+        .left h2, .right h2 { color: #FF8A5C; border-left: 6px solid #FFD93D; padding-left: 10px; }
+        .item { margin-bottom: 25px; position: relative; padding-left: 20px; }
+        .item::before { content: "●"; color: #FF6B6B; position: absolute; left: 0; top: 0; font-size: 20px; }
+        .date { font-weight: bold; color: #FF6B6B; display: block; }
+        @media (max-width:600px) {
+            .timeline-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <h1>📅 时间线</h1>
+    <div class="timeline-container">
+        <div class="left">
+            <h2>🌟 人生线 · 活动</h2>
+            <div class="item"><span class="date">1999年</span>出生于甘肃兰州</div>
+            <div class="item"><span class="date">2018年</span>参加《声入人心》</div>
+            <div class="item"><span class="date">2023年</span>伯克利毕业</div>
+            <div class="item"><span class="date">2024年</span>首次个人音乐会</div>
+        </div>
+        <div class="right">
+            <h2>🎤 综艺 · 演唱会</h2>
+            <div class="item"><span class="date">2025年</span>参与6档综艺</div>
+            <div class="item"><span class="date">2025年</span>全国巡演12场</div>
+            <div class="item"><span class="date">2026年</span>新专辑筹备中</div>
+        </div>
+    </div>
+</body>
+</html>
