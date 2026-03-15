@@ -117,12 +117,12 @@ body {
     display: flex;
     flex: 1;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;      /* 强制滚动对齐 */
+    scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     background: transparent;
-    padding: 0 10px 20px;                /* 左右留白10px，为卡片居中提供空间 */
-    gap: 0;                               /* 卡片间隙由宽度百分比控制，无需额外间距 */
+    padding: 0 0 20px 0;          /* 取消左右内边距，让卡片完全贴边 */
+    gap: 0;
 }
 .cards-container::-webkit-scrollbar {
     height: 10px;
@@ -134,8 +134,8 @@ body {
 
 /* 卡片样式 */
 .card {
-    flex: 0 0 80%;                       /* 宽度占容器的80%，左右各留10%空白，实现居中效果 */
-    scroll-snap-align: center;            /* 关键：居中对齐 */
+    flex: 0 0 100%;                /* 宽度100%，占满容器 */
+    scroll-snap-align: start;       /* 左对齐 */
     overflow-y: auto;
     padding: 25px;
     background: rgba(255, 245, 235, 0.7);
@@ -143,7 +143,6 @@ body {
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(255, 107, 107, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.7);
-    /* 去除原来的 margin-right，由容器内边距和宽度百分比控制 */
 }
 
 .page-frame {
@@ -152,5 +151,3 @@ body {
     height: auto;
     min-height: 400px;
 }
-
-/* 所有设备统一，无需手机媒体查询 */
