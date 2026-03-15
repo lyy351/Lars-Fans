@@ -1,5 +1,4 @@
-/* ===== 黄子弘凡 · 暖阳云朵主题 ===== */
-/* 色值：暖黄 #FFD93D / 暖橙 #FF8A5C / 暖红 #FF6B6B / 背景 #FFF5E6 */
+/* ===== 黄子弘凡 · 纯桌面版样式（所有设备统一） ===== */
 * {
     margin: 0;
     padding: 0;
@@ -12,46 +11,15 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    position: relative;
     overflow-x: hidden;
-}
-
-/* 云朵装饰背景 */
-body::before {
-    content: '';
-    position: fixed;
-    top: -50px;
-    right: -50px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255, 216, 138, 0.2) 0%, transparent 70%);
-    border-radius: 50%;
-    z-index: 0;
-    pointer-events: none;
-}
-body::after {
-    content: '';
-    position: fixed;
-    bottom: -80px;
-    left: -80px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255, 139, 92, 0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    z-index: 0;
-    pointer-events: none;
 }
 
 /* 顶部栏 */
 .top-bar {
     background: rgba(255, 245, 230, 0.8);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     color: #2C1810;
-    border-bottom: none;
     padding: 15px 25px;
-    position: relative;
-    z-index: 10;
     box-shadow: 0 10px 30px rgba(255, 107, 107, 0.15);
     border-radius: 0 0 50px 50px;
     margin-bottom: 10px;
@@ -66,12 +34,9 @@ body::after {
 }
 .smiley {
     font-size: 90px;
-    line-height: 1;
     color: #FF8A5C;
     filter: drop-shadow(0 10px 15px rgba(255, 107, 107, 0.4));
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
-    user-select: none;
     background: rgba(255, 255, 255, 0.5);
     width: 120px;
     height: 120px;
@@ -81,28 +46,25 @@ body::after {
     border-radius: 50%;
     backdrop-filter: blur(5px);
     box-shadow: 0 15px 25px rgba(255, 138, 92, 0.3);
+    transition: transform 0.3s ease;
 }
 .smiley:hover {
-    transform: scale(1.15) rotate(5deg);
+    transform: scale(1.1) rotate(5deg);
     color: #FF6B6B;
 }
 .tagline {
     font-size: 20px;
     color: #2C1810;
     background: rgba(255, 217, 61, 0.7);
-    backdrop-filter: blur(5px);
     padding: 8px 20px;
     border-radius: 60px;
     border: 2px solid #FF8A5C;
-    box-shadow: 0 5px 10px rgba(255, 107, 107, 0.2);
-    font-weight: 500;
-    letter-spacing: 1px;
 }
 
-/* 导航栏（关键：可横向滚动，不换行） */
+/* 导航栏（一行显示，不换行） */
 .nav-bar {
     display: flex;
-    gap: 12px;
+    gap: 15px;
     overflow-x: auto;
     padding: 5px 0 15px;
     scrollbar-width: thin;
@@ -117,7 +79,6 @@ body::after {
 .nav-bar::-webkit-scrollbar-thumb {
     background: #FF8A5C;
     border-radius: 20px;
-    border: 2px solid #FFE8D6;
 }
 .nav-btn {
     flex: 0 0 auto;
@@ -128,7 +89,6 @@ body::after {
     font-size: 22px;
     font-weight: 600;
     background: rgba(255, 217, 61, 0.8);
-    backdrop-filter: blur(8px);
     border: 2px solid rgba(255, 255, 255, 0.6);
     border-radius: 60px;
     color: #2C1810;
@@ -136,7 +96,6 @@ body::after {
     box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
     transition: all 0.2s ease;
     white-space: nowrap;
-    letter-spacing: 0.5px;
 }
 .nav-btn.active {
     background: #FF6B6B;
@@ -149,26 +108,11 @@ body::after {
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(255, 107, 107, 0.4);
 }
-.nav-btn.active .btn-icon {
-    /* 可替换为GIF */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 32px;
-    height: 32px;
-    display: inline-block;
-    color: transparent;
-    text-indent: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-}
 .btn-icon {
     font-size: 32px;
-    line-height: 1;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
-/* 卡片容器 */
+/* 卡片容器：允许横向滚动（电脑版滑动） */
 .cards-container {
     display: flex;
     flex: 1;
@@ -177,88 +121,32 @@ body::after {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     background: transparent;
-    padding: 0 15px 15px;
-    gap: 15px;
-    position: relative;
-    z-index: 5;
+    padding: 0 20px 20px;
+    gap: 20px;
 }
 .cards-container::-webkit-scrollbar {
-    display: none;
+    height: 10px;
+}
+.cards-container::-webkit-scrollbar-thumb {
+    background: #FF8A5C;
+    border-radius: 20px;
 }
 .card {
-    flex: 0 0 calc(100% - 30px);
+    flex: 0 0 calc(100% - 40px);  /* 留出边距，避免贴边 */
     scroll-snap-align: start;
     overflow-y: auto;
     padding: 25px;
     background: rgba(255, 245, 235, 0.7);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-radius: 48px;
-    box-shadow: 0 25px 50px -12px rgba(255, 107, 107, 0.4), inset 0 -2px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(255, 107, 107, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.7);
-    margin-right: 15px;
-}
-@media (min-width: 769px) {
-    .card {
-        flex: 0 0 calc(100% - 40px);
-    }
 }
 .page-frame {
     width: 100%;
     border: none;
-    display: block;
     height: auto;
     min-height: 400px;
-    background: transparent;
 }
 
-/* 电脑端禁止手势滑动 */
-@media (min-width: 769px) {
-    .cards-container {
-        overflow-x: hidden;
-    }
-}
-
-/* 手机端适配：字体缩小，按钮紧凑 */
-@media (max-width: 768px) {
-    .top-bar {
-        padding: 10px 15px;
-        border-radius: 0 0 30px 30px;
-    }
-    .smiley {
-        font-size: 60px;
-        width: 80px;
-        height: 80px;
-    }
-    .tagline {
-        font-size: 14px;
-        padding: 4px 12px;
-    }
-    .nav-btn {
-        font-size: 16px;
-        padding: 6px 14px;
-    }
-    .btn-icon {
-        font-size: 20px;
-    }
-    .card {
-        padding: 15px;
-        border-radius: 36px;
-    }
-    .card h1 {
-        font-size: 24px;
-    }
-    .card h2 {
-        font-size: 20px;
-    }
-}
-
-/* 卡片内滚动条 */
-.card::-webkit-scrollbar {
-    width: 6px;
-}
-.card::-webkit-scrollbar-thumb {
-    background: #FF8A5C;
-    border-radius: 20px;
-    border: 2px solid #FFF5E6;
-}
+/* 所有设备统一，删除所有手机媒体查询 */
