@@ -121,8 +121,8 @@ body {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     background: transparent;
-    padding: 0 0 20px 0;          /* 取消左右内边距，让卡片完全贴边 */
-    gap: 0;
+    padding: 0 0 20px 0;          /* 容器无左右内边距，让卡片外间距起效 */
+    gap: 0;                         /* 不设gap，使用卡片margin */
 }
 .cards-container::-webkit-scrollbar {
     height: 10px;
@@ -134,8 +134,9 @@ body {
 
 /* 卡片样式 */
 .card {
-    flex: 0 0 100%;                /* 宽度100%，占满容器 */
-    scroll-snap-align: start;       /* 左对齐 */
+    flex: 0 0 100%;                /* 内容宽度占满容器 */
+    scroll-snap-align: start;       /* 左对齐（外边缘对齐容器左边缘） */
+    margin: 0 10px;                 /* 左右各10px间距，让卡片与容器边缘和相邻卡片产生间隙 */
     overflow-y: auto;
     padding: 25px;
     background: rgba(255, 245, 235, 0.7);
@@ -143,6 +144,7 @@ body {
     border-radius: 48px;
     box-shadow: 0 25px 50px -12px rgba(255, 107, 107, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.7);
+    /* 注意：由于左右margin，卡片实际总宽度为 100% + 20px，会超出容器，但滚动对齐使其一次只显示一个 */
 }
 
 .page-frame {
