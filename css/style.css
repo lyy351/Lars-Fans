@@ -1,32 +1,56 @@
 /* ===== 黄子弘凡 · 纯桌面版样式（所有设备统一） ===== */
-/* 引入像素字体 */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* 背景：纯黄色 + 纹理图片（凌乱平铺） */
 body {
     font-family: 'Segoe UI', 'Quicksand', system-ui, sans-serif;
-    background: linear-gradient(145deg, #FFF5E6 0%, #FFE8D6 100%);
+    background-color: #FFD93D;                     /* 纯黄色背景 */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    position: relative;
 }
 
-/* ===== 顶部栏加高（整体高度增加） ===== */
+/* 纹理层（半透明笑脸图片平铺） */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/smiley.png');
+    background-repeat: repeat;
+    background-size: 80px 80px;      /* 每个纹理块大小，可调整 */
+    opacity: 0.15;                    /* 透明度，让纹理隐约可见 */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 主要内容在纹理层之上 */
+.top-bar, .cards-container, .site-footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== 顶部栏（使用 Flex 垂直居中） ===== */
 .top-bar {
     background: rgba(255, 245, 230, 0.8);
     backdrop-filter: blur(10px);
     color: #2C1810;
-    padding: 40px 40px 30px 40px;      /* 上下内边距大幅增加 */
+    padding: 20px 40px;                /* 上下内边距相等，确保垂直居中 */
     box-shadow: 0 10px 30px rgba(255, 107, 107, 0.15);
     border-radius: 0 0 50px 50px;
     margin-bottom: 20px;
-    min-height: 180px;                 /* 明确最小高度，保证视觉增高 */
+    min-height: 180px;                  /* 保持高度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;             /* 垂直居中所有内容 */
 }
 
 /* 笑脸行 */
@@ -34,47 +58,49 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;               /* 保留与导航栏的间距 */
+    margin-bottom: 0;                    /* 移除底部间距，由父容器内边距控制 */
 }
 
-/* ===== 笑脸90×90像素，严格居中 ===== */
+/* 笑脸图片：90×90，圆形 */
 .smiley {
-    font-size: 70px;                   /* 适当大小填充90px框 */
-    color: #FF8A5C;
-    filter: drop-shadow(0 10px 15px rgba(255, 107, 107, 0.4));
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.5);
     width: 90px;
     height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(5px);
     box-shadow: 0 15px 25px rgba(255, 138, 92, 0.3);
+    overflow: hidden;
+    cursor: pointer;
     transition: transform 0.3s ease;
-    line-height: 1;                    /* 防止字体行高影响垂直居中 */
+}
+
+.smiley img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;                   /* 覆盖圆形，可能裁剪；若希望完整可改为 contain */
+    border-radius: 50%;
 }
 
 .smiley:hover {
     transform: scale(1.1) rotate(5deg);
-    color: #FF6B6B;
 }
 
 /* 右侧标语（像素字体） */
 .tagline {
-    font-size: 16px;                   /* 像素字体较小，调整到合适 */
+    font-size: 16px;
     color: #2C1810;
     background: rgba(255, 217, 61, 0.7);
     padding: 8px 20px;
     border-radius: 60px;
     border: 2px solid #FF8A5C;
-    font-family: 'Press Start 2P', cursive;
     letter-spacing: 1px;
     line-height: 1.5;
 }
 
-/* ===== 导航栏：无图标，文字居中，3D立体按钮 ===== */
+/* ===== 导航栏（无图标，3D立体按钮） ===== */
 .nav-bar {
     display: flex;
     gap: 15px;
@@ -94,29 +120,26 @@ body {
     border-radius: 20px;
 }
 
-/* 3D立体按钮样式 */
 .nav-btn {
     flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0;                           /* 无图标，间隙为0 */
+    gap: 0;
     padding: 14px 36px;
-    font-size: 16px;                  /* 像素字体稍小，可调整 */
+    font-size: 16px;
     font-weight: 600;
     background: rgba(255, 217, 61, 0.8);
     border: 2px solid rgba(255, 255, 255, 0.6);
     border-radius: 60px;
     color: #2C1810;
     cursor: pointer;
-    /* 3D立体阴影 */
     box-shadow: 
         0 8px 0 #FF8A5C,
         0 10px 20px rgba(255, 107, 107, 0.3);
     transform: translateY(0);
     transition: all 0.1s ease;
     white-space: nowrap;
-    font-family: 'Press Start 2P', cursive;
     letter-spacing: 1px;
     line-height: 1.2;
 }
@@ -150,7 +173,7 @@ body {
     display: none;
 }
 
-/* ===== 卡片容器（滑动区域） ===== */
+/* ===== 卡片容器 ===== */
 .cards-container {
     display: flex;
     flex: 1;
@@ -161,6 +184,8 @@ body {
     background: transparent;
     padding: 0 0 20px 0;
     gap: 0;
+    position: relative;
+    z-index: 1;
 }
 .cards-container::-webkit-scrollbar {
     height: 10px;
@@ -190,13 +215,7 @@ body {
     min-height: 400px;
 }
 
-/* ===== 所有标题文字像素风格 ===== */
-h1, h2, h3, .content-title, .video-title, .date, .point-date {
-    font-family: 'Press Start 2P', cursive;
-    letter-spacing: 1px;
-    line-height: 1.6;
-}
-
+/* 标题字号（只定义大小，字体由 emfont 类控制） */
 h1 {
     font-size: 28px;
     margin-bottom: 20px;
@@ -208,7 +227,7 @@ h3 {
     font-size: 18px;
 }
 
-/* 可选：页脚版权样式（如果添加） */
+/* 页脚版权（如需添加） */
 .site-footer {
     text-align: center;
     padding: 15px 20px;
@@ -218,7 +237,8 @@ h3 {
     backdrop-filter: blur(5px);
     border-top: 1px solid rgba(255, 107, 107, 0.3);
     margin-top: 10px;
-    font-family: 'Press Start 2P', cursive;
     letter-spacing: 1px;
     line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
