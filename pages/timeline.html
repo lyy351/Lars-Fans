@@ -5,31 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黄子弘凡 · 时间线</title>
     <style>
-        /* 保持与主站一致的暖色调 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
-            background: #FFF9E6;  /* 与卡片背景相同 */
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .timeline-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 24px;
-            padding: 30px 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            background: transparent;
+            padding: 10px;
         }
         h1 {
             color: #FF6B6B;
             border-bottom: 3px solid #FFD93D;
             padding-bottom: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -44,29 +31,21 @@
             border: 2px solid #FF6B6B;
             color: #2C1810;
             font-weight: bold;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 2px 2px 0 #FF6B6B;
             font-size: 16px;
+            box-shadow: 2px 2px 0 #FF6B6B;
         }
         .sort-btn.active {
             background: #FF6B6B;
             color: white;
             border-color: #FFD93D;
-            box-shadow: 0 0 0 2px #FFD93D;
         }
-        .sort-btn:hover {
-            transform: scale(1.02);
-        }
-
-        /* 时间轴区域 */
         .timeline {
             position: relative;
             margin-top: 30px;
         }
-        /* 中间线 */
         .timeline::before {
             content: '';
             position: absolute;
@@ -86,24 +65,21 @@
             position: relative;
             z-index: 2;
         }
-        /* 左侧内容 */
-        .timeline-left {
+        .timeline-left, .timeline-right {
             width: 45%;
+        }
+        .timeline-left {
             padding-right: 30px;
             text-align: right;
         }
-        /* 右侧内容 */
         .timeline-right {
-            width: 45%;
             padding-left: 30px;
         }
-        /* 中间的时间点 */
         .timeline-point {
             width: 10%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
         }
         .point-dot {
             width: 20px;
@@ -112,8 +88,6 @@
             border: 4px solid #FFD93D;
             border-radius: 50%;
             box-shadow: 0 0 0 2px #FF8A5C;
-            z-index: 3;
-            transition: 0.2s;
         }
         .point-date {
             font-size: 16px;
@@ -126,9 +100,9 @@
             white-space: nowrap;
             border: 1px solid #FF8A5C;
         }
-        /* 内容卡片 */
         .content-card {
-            background: #FFF1E0;
+            background: rgba(255, 241, 224, 0.8);
+            backdrop-filter: blur(4px);
             padding: 15px 20px;
             border-radius: 20px;
             border-left: 6px solid #FF8A5C;
@@ -141,25 +115,10 @@
             font-weight: bold;
             color: #2C1810;
             font-size: 18px;
-            margin-bottom: 5px;
         }
-        .content-desc {
-            color: #555;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        /* 空状态 */
-        .empty-note {
-            color: #aaa;
-            text-align: center;
-            padding: 40px;
-            font-style: italic;
-        }
-        /* 手机适配 */
-        @media (max-width: 700px) {
-            .timeline-item {
-                flex-wrap: wrap;
-            }
+        @media (max-width: 768px) {
+            h1 { font-size: 24px; flex-direction: column; align-items: start; gap:10px; }
+            .timeline-item { flex-wrap: wrap; }
             .timeline-left, .timeline-right, .timeline-point {
                 width: 100%;
                 padding: 0;
@@ -170,125 +129,53 @@
                 gap: 10px;
                 margin: 10px 0;
             }
-            .point-date {
-                margin-top: 0;
-            }
-            .timeline::before {
-                left: 20px;
-            }
-            .timeline-left {
-                padding-left: 40px;
-            }
-            .timeline-right {
-                padding-left: 40px;
-            }
+            .point-date { margin-top:0; }
+            .timeline::before { left: 20px; }
+            .timeline-left, .timeline-right { padding-left: 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="timeline-container">
-        <h1>
-            📅 黄子弘凡 · 时间线
-            <div class="sort-controls">
-                <button class="sort-btn active" id="sortAsc">顺序 ↑</button>
-                <button class="sort-btn" id="sortDesc">倒序 ↓</button>
-            </div>
-        </h1>
-
-        <!-- 时间轴将动态渲染到这里 -->
-        <div id="timelineWrapper"></div>
-    </div>
-
+    <h1>
+        📅 黄子弘凡 · 时间线
+        <div class="sort-controls">
+            <button class="sort-btn active" id="sortAsc">顺序 ↑</button>
+            <button class="sort-btn" id="sortDesc">倒序 ↓</button>
+        </div>
+    </h1>
+    <div id="timelineWrapper" class="timeline"></div>
     <script>
-        (function() {
-            // 原始数据：左边=日常/活动，右边=综艺/演唱会
-            const rawData = [
-                { date: '1999年', left: '出生于甘肃兰州', right: '' },
-                { date: '2018年', left: '参加《声入人心》第一季', right: '《声入人心》演唱' },
-                { date: '2019年', left: '随声入人心巡演', right: '音乐会巡演' },
-                { date: '2020年', left: '发行首支单曲', right: '《你的名字》' },
-                { date: '2021年', left: '参加综艺《流淌的歌声》', right: '' },
-                { date: '2022年', left: '伯克利音乐学院深造', right: '' },
-                { date: '2023年', left: '伯克利毕业音乐会', right: '毕业音乐会' },
-                { date: '2024年', left: '首次个人巡回音乐会', right: '“元与均棋”音乐会' },
-                { date: '2025年', left: '参与6档综艺录制', right: '《时光音乐会》《声生不息》等' },
-                { date: '2026年', left: '新专辑筹备中', right: '待定' }
+        (function(){
+            const data = [
+                { date:'1999年', left:'出生于甘肃兰州', right:'—' },
+                { date:'2018年', left:'参加《声入人心》', right:'《声入人心》演唱' },
+                { date:'2023年', left:'伯克利毕业', right:'毕业音乐会' },
+                { date:'2024年', left:'首次个人巡演', right:'“元与均棋”音乐会' },
+                { date:'2025年', left:'参与6档综艺', right:'《时光音乐会》等' },
+                { date:'2026年', left:'新专辑筹备', right:'待定' }
             ];
-
-            // 过滤掉空内容的数据（如果右边为空，则显示占位）
-            const timelineData = rawData.map(item => ({
-                date: item.date,
-                left: item.left || '—',
-                right: item.right || '—'
-            }));
-
             const wrapper = document.getElementById('timelineWrapper');
-            const sortAscBtn = document.getElementById('sortAsc');
-            const sortDescBtn = document.getElementById('sortDesc');
-
-            let currentOrder = 'asc'; // asc 或 desc
-
-            // 渲染函数
+            const ascBtn = document.getElementById('sortAsc');
+            const descBtn = document.getElementById('sortDesc');
+            let order = 'asc';
             function render(order) {
-                // 复制数据并排序
-                let sorted = [...timelineData];
-                if (order === 'asc') {
-                    sorted.sort((a, b) => a.date.localeCompare(b.date, 'zh-CN', { numeric: true }));
-                } else {
-                    sorted.sort((a, b) => b.date.localeCompare(a.date, 'zh-CN', { numeric: true }));
-                }
-
-                // 生成HTML
-                let html = '<div class="timeline">';
-                sorted.forEach(item => {
+                let sorted = [...data].sort((a,b)=> order==='asc'? a.date.localeCompare(b.date): b.date.localeCompare(a.date));
+                let html = '';
+                sorted.forEach(item=>{
                     html += `
                         <div class="timeline-item">
-                            <div class="timeline-left">
-                                <div class="content-card left-card">
-                                    <div class="content-title">🌟 ${item.left}</div>
-                                    ${item.left.includes('—') ? '' : '<div class="content-desc">日常·活动</div>'}
-                                </div>
-                            </div>
-                            <div class="timeline-point">
-                                <div class="point-dot"></div>
-                                <span class="point-date">${item.date}</span>
-                            </div>
-                            <div class="timeline-right">
-                                <div class="content-card">
-                                    <div class="content-title">🎤 ${item.right}</div>
-                                    ${item.right.includes('—') ? '' : '<div class="content-desc">综艺·演唱会</div>'}
-                                </div>
-                            </div>
+                            <div class="timeline-left"><div class="content-card left-card"><div class="content-title">🌟 ${item.left}</div></div></div>
+                            <div class="timeline-point"><div class="point-dot"></div><span class="point-date">${item.date}</span></div>
+                            <div class="timeline-right"><div class="content-card"><div class="content-title">🎤 ${item.right}</div></div></div>
                         </div>
                     `;
                 });
-                html += '</div>';
-
                 wrapper.innerHTML = html;
-
-                // 更新按钮激活状态
-                if (order === 'asc') {
-                    sortAscBtn.classList.add('active');
-                    sortDescBtn.classList.remove('active');
-                } else {
-                    sortDescBtn.classList.add('active');
-                    sortAscBtn.classList.remove('active');
-                }
+                ascBtn.classList.toggle('active', order==='asc');
+                descBtn.classList.toggle('active', order==='desc');
             }
-
-            // 事件绑定
-            sortAscBtn.addEventListener('click', () => {
-                if (currentOrder === 'asc') return;
-                currentOrder = 'asc';
-                render('asc');
-            });
-            sortDescBtn.addEventListener('click', () => {
-                if (currentOrder === 'desc') return;
-                currentOrder = 'desc';
-                render('desc');
-            });
-
-            // 初始渲染（顺序）
+            ascBtn.addEventListener('click', ()=>{ order='asc'; render('asc'); });
+            descBtn.addEventListener('click', ()=>{ order='desc'; render('desc'); });
             render('asc');
         })();
     </script>
