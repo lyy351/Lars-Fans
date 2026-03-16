@@ -175,14 +175,9 @@
             scroll-snap-align: start;
         }
 
-        /* 圆环布局 */
-        .layout-circle {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            margin: 0 auto;
-        }
+        /* 圆环布局 - 通过JS动态设置transform，所以这里只保留基础 */
         .layout-circle .card {
+            margin: 0; /* 移除margin，由JS控制绝对定位 */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -190,6 +185,7 @@
             height: 220px;
             margin-left: -90px;
             margin-top: -110px;
+            transition: transform 0.3s ease; /* 平滑拖拽 */
         }
 
         /* 3D队列布局 */
@@ -244,6 +240,13 @@
             const buttons = document.querySelectorAll('.layout-btn');
             let currentLayout = 'row';
 
+            // 圆环拖拽相关变量
+            let isDragging = false;
+            let startX = 0;
+            let currentAngle = 0; // 当前旋转偏移（弧度）
+            let lastAngle = 0;    // 记录拖拽开始时的角度
+            const radius = 200;    // 圆环半径
+
             function renderCards() {
                 let html = '';
                 cardsData.forEach((item, index) => {
@@ -263,22 +266,25 @@
             }
 
             container.innerHTML = renderCards();
-            container.classList.add(`layout-${currentLayout}`);
 
-            function applyCircleLayout() {
+            // 应用圆环布局，接受偏移角度 offset (弧度)
+            function applyCircleLayout(offset = 0) {
                 const cards = document.querySelectorAll('.card');
                 const total = cards.length;
                 const angleStep = (2 * Math.PI) / total;
-                const radius = 200;
                 cards.forEach((card, i) => {
-                    const angle = i * angleStep;
+                    const angle = i * angleStep + offset;
                     const x = Math.cos(angle) * radius;
                     const z = Math.sin(angle) * radius;
-                    card.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${angle}rad)`;
-                    card.style.position = 'absolute';
+                    // 让卡片始终面向圆心？这里简单旋转使卡片正面朝外（可选）
+                    // 如果希望卡片始终面向圆心，可以加上 rotateY(angle) 但会和hover冲突
+                    // 这里只做位置移动，保留卡片自身翻转
+                    card.style.transform = `translateX(${x}px) translateZ(${z}px)`;
                 });
+                currentAngle = offset; // 记录当前角度
             }
 
+            // 清除所有卡片的内联样式（用于切换布局）
             function clearCardStyles() {
                 const cards = document.querySelectorAll('.card');
                 cards.forEach(card => {
@@ -287,11 +293,24 @@
                 });
             }
 
+            // 切换布局
             function switchLayout(layout) {
                 container.classList.remove('layout-row', 'layout-circle', 'layout-3d');
                 clearCardStyles();
                 container.classList.add(`layout-${layout}`);
-                if (layout === 'circle') applyCircleLayout();
+
+                if (layout === 'circle') {
+                    // 重置旋转角度
+                    currentAngle = 0;
+                    lastAngle = 0;
+                    applyCircleLayout(0);
+                    // 添加拖拽监听
+                    enableDrag(true);
+                } else {
+                    // 禁用拖拽
+                    enableDrag(false);
+                }
+
                 buttons.forEach(btn => {
                     btn.classList.remove('active');
                     if (btn.dataset.layout === layout) btn.classList.add('active');
@@ -299,11 +318,59 @@
                 currentLayout = layout;
             }
 
+            // 拖拽事件处理
+            let dragEnabled = false;
+
+            function enableDrag(enable) {
+                if (enable === dragEnabled) return;
+                dragEnabled = enable;
+                if (enable) {
+                    container.addEventListener('mousedown', onDragStart);
+                    window.addEventListener('mousemove', onDragMove);
+                    window.addEventListener('mouseup', onDragEnd);
+                } else {
+                    container.removeEventListener('mousedown', onDragStart);
+                    window.removeEventListener('mousemove', onDragMove);
+                    window.removeEventListener('mouseup', onDragEnd);
+                }
+            }
+
+            function onDragStart(e) {
+                if (currentLayout !== 'circle') return;
+                isDragging = true;
+                startX = e.clientX;
+                lastAngle = currentAngle;
+                container.style.cursor = 'grabbing';
+                // 临时禁止卡片hover翻转？不需要，因为拖拽时hover也会触发，但可接受
+                e.preventDefault(); // 防止选中文本
+            }
+
+            function onDragMove(e) {
+                if (!isDragging || currentLayout !== 'circle') return;
+                const deltaX = e.clientX - startX;
+                // 灵敏度：每移动100px旋转半圈？这里调小一点
+                const angleDelta = deltaX * 0.01; // 弧度
+                currentAngle = lastAngle + angleDelta;
+                applyCircleLayout(currentAngle);
+            }
+
+            function onDragEnd(e) {
+                if (currentLayout !== 'circle') return;
+                isDragging = false;
+                container.style.cursor = '';
+                // 可以添加惯性，暂不实现
+            }
+
+            // 初始化按钮点击
             buttons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    switchLayout(e.target.dataset.layout);
+                    const layout = e.target.dataset.layout;
+                    switchLayout(layout);
                 });
             });
+
+            // 默认激活行布局
+            switchLayout('row');
         })();
     </script>
 </body>
