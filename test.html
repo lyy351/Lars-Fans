@@ -20,16 +20,19 @@
 <body>
     <canvas id="bgCanvas"></canvas>
     <div class="content">
-        <h1>✨ 精致星星 + 云朵 + 流星 ✨</h1>
-        <p>1x1像素星星（大小不一），圆形云朵，简单流星</p>
+        <h1>✨ 自适应大小的精致像素背景 ✨</h1>
+        <p>星星、云朵、流星会随窗口大小缩放，不再显得小</p>
     </div>
     <script>
         (function() {
-            console.log('精致星星 + 云 + 流星 版启动');
+            console.log('自适应大小版启动');
             const canvas = document.getElementById('bgCanvas');
             const ctx = canvas.getContext('2d');
 
-            // ---------- 星星部分（完全保留之前的精致版本）----------
+            // 缩放系数分母：数值越小，元素越大
+            const SCALE_DENOMINATOR = 200; // 可调整，例如改为150元素会更大
+
+            // ---------- 星星帧生成（逻辑像素坐标）----------
             function generateStarFrames(maxOffset) {
                 const frames = [];
                 for (let frame = 0; frame <= maxOffset; frame++) {
@@ -67,6 +70,7 @@
                 { frames: largeFrames, name: 'large' }
             ];
 
+            // 动态星星（逻辑位置）
             const stars = [];
             const STAR_COUNT = 25;
             for (let i = 0; i < STAR_COUNT; i++) {
@@ -81,35 +85,34 @@
                     maxFrame: type.frames.length - 1
                 });
             }
+            // 静态小星星（逻辑位置）
             const staticStars = [];
             for (let i = 0; i < 50; i++) {
                 staticStars.push({ x: Math.random(), y: Math.random() });
             }
 
-            // ---------- 云朵数据（简化版：用圆形叠加）----------
+            // ---------- 云朵数据（逻辑位置和逻辑大小）----------
             const clouds = [];
             const CLOUD_COUNT = 5;
             for (let i = 0; i < CLOUD_COUNT; i++) {
                 clouds.push({
-                    x: Math.random(),          // 相对位置 0-1
+                    x: Math.random(),
                     y: 0.2 + Math.random() * 0.6,
-                    scale: 0.8 + Math.random() * 1.2, // 大小缩放
-                    speed: (0.1 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1), // 水平移动
+                    scale: 0.8 + Math.random() * 1.2, // 逻辑缩放因子
+                    speed: (0.1 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1),
                     type: Math.random() > 0.5 ? 'dark' : 'light'
                 });
             }
 
-            // 绘制云朵的函数（纯圆形，无阴影，兼容性好）
-            function drawCloud(ctx, cx, cy, scale, type) {
-                const baseRadius = 30 * scale;
-                // 主体颜色
+            // 绘制云朵（使用当前 pixelScale）
+            function drawCloud(ctx, cx, cy, scale, type, pixelScale) {
+                const baseRadius = 30 * scale * pixelScale; // 基础半径乘以缩放
                 let color;
                 if (type === 'dark') {
                     color = 'rgba(70, 70, 90, 0.7)';
                 } else {
                     color = 'rgba(220, 230, 240, 0.8)';
                 }
-                // 绘制三个叠加的圆
                 ctx.beginPath();
                 ctx.arc(cx, cy, baseRadius * 0.6, 0, 2 * Math.PI);
                 ctx.arc(cx - baseRadius * 0.4, cy - baseRadius * 0.2, baseRadius * 0.5, 0, 2 * Math.PI);
@@ -117,28 +120,26 @@
                 ctx.fillStyle = color;
                 ctx.fill();
 
-                // 高光（更亮的小圆）
                 ctx.beginPath();
                 ctx.arc(cx - baseRadius * 0.2, cy - baseRadius * 0.15, baseRadius * 0.2, 0, 2 * Math.PI);
                 ctx.fillStyle = type === 'dark' ? 'rgba(140, 140, 170, 0.6)' : 'rgba(255, 255, 255, 0.7)';
                 ctx.fill();
 
-                // 阳光边缘（淡黄色）
                 ctx.beginPath();
                 ctx.arc(cx + baseRadius * 0.3, cy - baseRadius * 0.1, baseRadius * 0.25, 0, 2 * Math.PI);
                 ctx.fillStyle = 'rgba(255, 240, 200, 0.3)';
                 ctx.fill();
             }
 
-            // ---------- 流星数据（简化版）----------
+            // ---------- 流星数据（逻辑位置百分比）----------
             const meteors = [];
             const METEOR_COUNT = 2;
             function spawnMeteor() {
                 return {
-                    x: Math.random() * 100,      // 百分比 0-100
+                    x: Math.random() * 100,
                     y: Math.random() * 30,
                     speed: 2 + Math.random() * 2,
-                    angle: (Math.random() * 30 - 15) * Math.PI / 180, // -15°～15°
+                    angle: (Math.random() * 30 - 15) * Math.PI / 180,
                     length: 40 + Math.random() * 40
                 };
             }
@@ -146,31 +147,36 @@
                 meteors.push(spawnMeteor());
             }
 
-            // ---------- 动画循环 ----------
+            // ---------- 动画循环，每次重新计算缩放系数 ----------
             function draw() {
                 const w = canvas.width = window.innerWidth;
                 const h = canvas.height = window.innerHeight;
+
+                // 计算基础缩放系数：基于窗口高度，确保元素大小合适
+                const pixelScale = Math.max(1, Math.floor(h / SCALE_DENOMINATOR));
+
                 ctx.clearRect(0, 0, w, h);
 
-                // 1. 先绘制云朵（背景层）
+                // 1. 绘制云朵
                 clouds.forEach(cloud => {
-                    // 水平移动
-                    cloud.x += cloud.speed * 0.005; // 每帧移动一点点
+                    cloud.x += cloud.speed * 0.005;
                     if (cloud.x > 1.2) cloud.x = -0.2;
                     if (cloud.x < -0.2) cloud.x = 1.2;
-
                     const cx = cloud.x * w;
                     const cy = cloud.y * h;
-                    drawCloud(ctx, cx, cy, cloud.scale, cloud.type);
+                    drawCloud(ctx, cx, cy, cloud.scale, cloud.type, pixelScale);
                 });
 
-                // 2. 绘制静态小星星
+                // 2. 静态小星星（仍然是1像素，但用pixelScale放大？可以保持1像素，或者也缩放？为了视觉统一，也可以缩放）
+                // 小星星我们让它保持1像素？或者也按比例缩放？为了不过于突兀，这里也缩放为 pixelScale x pixelScale 的点。
                 staticStars.forEach(s => {
+                    const px = s.x * w;
+                    const py = s.y * h;
                     ctx.fillStyle = `rgba(255, 255, 220, 0.7)`;
-                    ctx.fillRect(s.x * w, s.y * h, 1, 1);
+                    ctx.fillRect(px, py, pixelScale, pixelScale); // 缩放小星星
                 });
 
-                // 3. 绘制动态星星（核心）
+                // 3. 动态星星（核心）
                 const time = Date.now() / 200;
                 stars.forEach(star => {
                     const t = Math.sin(time * star.speed + star.phase);
@@ -190,19 +196,18 @@
                     const cy = star.y * h;
                     frame.forEach(([dx, dy]) => {
                         ctx.fillStyle = '#FFD966';
-                        ctx.fillRect(cx + dx, cy + dy, 1, 1);
+                        // 每个逻辑像素点绘制为 pixelScale x pixelScale 的正方形，偏移也乘以 pixelScale
+                        ctx.fillRect(cx + dx * pixelScale, cy + dy * pixelScale, pixelScale, pixelScale);
                     });
                 });
 
-                // 4. 绘制流星（最后画，让它在最上层）
+                // 4. 流星
                 meteors.forEach(meteor => {
-                    // 转换百分比到像素
                     let x = (meteor.x / 100) * w;
                     let y = (meteor.y / 100) * h;
                     const angle = meteor.angle;
-                    const length = meteor.length;
+                    const length = meteor.length * pixelScale; // 流星长度也缩放
 
-                    // 画轨迹（一串逐渐变淡的小圆）
                     for (let i = 0; i < 10; i++) {
                         const seg = i / 10;
                         const segX = x - Math.cos(angle) * length * seg;
@@ -210,15 +215,14 @@
                         const alpha = 0.6 * (1 - seg);
                         ctx.fillStyle = `rgba(255, 255, 210, ${alpha})`;
                         ctx.beginPath();
-                        ctx.arc(segX, segY, 2 + seg * 2, 0, 2 * Math.PI);
+                        ctx.arc(segX, segY, (2 + seg * 2) * pixelScale, 0, 2 * Math.PI); // 点半径也缩放
                         ctx.fill();
                     }
 
-                    // 更新位置（百分比坐标，避免像素单位混乱）
-                    meteor.x += meteor.speed * Math.cos(angle) * 100 / w; // 转换成百分比增量
+                    // 更新位置（百分比）
+                    meteor.x += meteor.speed * Math.cos(angle) * 100 / w;
                     meteor.y += meteor.speed * Math.sin(angle) * 100 / h;
 
-                    // 飞出屏幕重置
                     if (meteor.x > 120 || meteor.x < -20 || meteor.y > 120 || meteor.y < -20) {
                         const m = spawnMeteor();
                         meteor.x = m.x;
@@ -232,7 +236,6 @@
                 requestAnimationFrame(draw);
             }
             draw();
-            console.log('动画启动，包含云朵和流星');
         })();
     </script>
 </body>
