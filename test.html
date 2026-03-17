@@ -1,23 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>像素背景：多尺寸星星 ✨ 流星·云朵</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0a0f1e;
-        }
-        #bgCanvas {
+        body { margin:0; background:#0a0f1e; }
+        #testCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: block;
             image-rendering: pixelated;
             background: transparent;
@@ -25,245 +14,74 @@
             z-index: -1;
         }
         .content {
-            position: relative;
-            z-index: 1;
-            padding: 2rem;
-            color: white;
-            text-shadow: 0 2px 5px black;
-            font-family: system-ui, sans-serif;
+            position: relative; z-index: 1; padding: 20px; color: white;
         }
     </style>
 </head>
 <body>
-    <canvas id="bgCanvas"></canvas>
-
+    <canvas id="testCanvas"></canvas>
     <div class="content">
-        <h1>✨ 多尺寸星星 + 流星 + 云朵 ✨</h1>
-        <p>星星有 1x1, 2x2, 3x4, 2x6 像素块，零散分布</p>
+        <h1>🔥 绝对星星测试</h1>
+        <p>应该能看到一颗亮红色的星星在中央闪烁</p>
     </div>
-
     <script>
-        (function() {
-            const canvas = document.getElementById('bgCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+        console.log('=== 绝对星星测试开始 ===');
+        const canvas = document.getElementById('testCanvas');
+        if (!canvas) {
+            console.error('canvas 元素未找到！');
+        } else {
+            console.log('canvas 找到，宽度：', canvas.width, '高度：', canvas.height);
+        }
+        const ctx = canvas.getContext('2d');
+        console.log('ctx 获取成功');
 
-            // ========== 配置 ==========
-            const CONFIG = {
-                STAR_DYNAMIC_COUNT: 20,      // 动态星星数量（增加数量，更丰富）
-                STAR_STATIC_COUNT: 40,        // 静态小星星
-                CLOUD_COUNT: 6,
-                METEOR_COUNT: 2,
-                METEOR_SPEED: 2,
-                CLOUD_SPEED: 0.15,
-            };
+        // 最简单的帧数据：只使用最大帧（完整星星）
+        const starFrame = [
+            [0, 0], [0, -1], [0, 1], [-1, 0], [1, 0],
+            [0, -2], [0, 2], [-2, 0], [2, 0],
+            [0, -3], [0, 3], [-3, 0], [3, 0],
+            [0, -4], [0, 4], [-4, 0], [4, 0],
+            [-1, -4], [1, -4], [-1, 4], [1, 4],
+            [-2, -3], [2, -3], [-2, 3], [2, 3],
+            [-3, -2], [3, -2], [-3, 2], [3, 2],
+            [-4, -1], [4, -1], [-4, 1], [4, 1],
+            [-2, -2], [2, -2], [-2, 2], [2, 2]
+        ];
+        console.log('星星帧像素点数量：', starFrame.length);
 
-            // ========== 瘦长四角星帧数据（同前，共6帧）==========
-            const starFrames = [
-                [[0, 0]],
-                [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0]],
-                [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0],
-                 [0, -2], [0, 2], [-2, 0], [2, 0],
-                 [-1, -1], [1, -1], [-1, 1], [1, 1]],
-                [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0],
-                 [0, -2], [0, 2], [-2, 0], [2, 0],
-                 [0, -3], [0, 3], [-3, 0], [3, 0],
-                 [-1, -2], [1, -2], [-1, 2], [1, 2],
-                 [-2, -1], [2, -1], [-2, 1], [2, 1]],
-                [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0],
-                 [0, -2], [0, 2], [-2, 0], [2, 0],
-                 [0, -3], [0, 3], [-3, 0], [3, 0],
-                 [0, -4], [0, 4], [-4, 0], [4, 0],
-                 [-1, -3], [1, -3], [-1, 3], [1, 3],
-                 [-2, -2], [2, -2], [-2, 2], [2, 2],
-                 [-3, -1], [3, -1], [-3, 1], [3, 1]],
-                [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0],
-                 [0, -2], [0, 2], [-2, 0], [2, 0],
-                 [0, -3], [0, 3], [-3, 0], [3, 0],
-                 [0, -4], [0, 4], [-4, 0], [4, 0],
-                 [-1, -4], [1, -4], [-1, 4], [1, 4],
-                 [-2, -3], [2, -3], [-2, 3], [2, 3],
-                 [-3, -2], [3, -2], [-3, 2], [3, 2],
-                 [-4, -1], [4, -1], [-4, 1], [4, 1],
-                 [-2, -2], [2, -2], [-2, 2], [2, 2]]
-            ];
-            const MAX_FRAME = starFrames.length - 1;
+        // 星星参数：固定屏幕中心，大小2x2，亮红色
+        const star = {
+            cx: 0.5, // 相对坐标 0.5 即中心
+            cy: 0.5,
+            blockW: 2,
+            blockH: 2,
+            color: '#FF3333' // 亮红
+        };
 
-            // ========== 动态星星数据（每颗星星包含随机尺寸）==========
-            const possibleSizes = [
-                [1, 1],   // 1x1 像素
-                [2, 2],   // 2x2
-                [3, 4],   // 3x4
-                [2, 6]    // 2x6
-            ];
+        function draw() {
+            const w = canvas.width = window.innerWidth;
+            const h = canvas.height = window.innerHeight;
+            ctx.clearRect(0, 0, w, h);
 
-            let dynamicStars = [];
-            for (let i = 0; i < CONFIG.STAR_DYNAMIC_COUNT; i++) {
-                const sizeIndex = Math.floor(Math.random() * possibleSizes.length);
-                dynamicStars.push({
-                    x: Math.random(),
-                    y: Math.random(),
-                    phaseOffset: Math.random() * 2 * Math.PI,
-                    speed: 0.5 + Math.random() * 0.8,
-                    blockW: possibleSizes[sizeIndex][0],
-                    blockH: possibleSizes[sizeIndex][1],
-                });
-            }
-
-            // ========== 静态小星星 ==========
-            let staticStars = [];
-            for (let i = 0; i < CONFIG.STAR_STATIC_COUNT; i++) {
-                staticStars.push({
-                    x: Math.random(),
-                    y: Math.random(),
-                });
-            }
-
-            // ========== 云朵数据（同前）==========
-            let clouds = [];
-            for (let i = 0; i < CONFIG.CLOUD_COUNT; i++) {
-                clouds.push({
-                    x: Math.random() * 100,
-                    y: 0.2 + Math.random() * 0.6,
-                    scale: 0.8 + Math.random() * 1.5,
-                    type: Math.random() > 0.5 ? 'dark' : 'light',
-                    brightness: 0.6 + Math.random() * 0.4,
-                    speed: (0.1 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1),
-                });
-            }
-
-            // ========== 流星数据 ==========
-            let meteors = [];
-            function spawnMeteor() {
-                return {
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight * 0.3,
-                    length: 30 + Math.random() * 40,
-                    speed: CONFIG.METEOR_SPEED * (0.8 + Math.random() * 0.6),
-                    angle: (Math.random() * 20 - 10) * Math.PI / 180,
-                };
-            }
-            for (let i = 0; i < CONFIG.METEOR_COUNT; i++) {
-                meteors.push(spawnMeteor());
-            }
-
-            // ========== 绘制云朵 ==========
-            function drawCloud(ctx, cx, cy, scale, type, brightness) {
-                const w = 60 * scale;
-                const h = 30 * scale;
-                let baseColor, highlightColor;
-                if (type === 'dark') {
-                    baseColor = `rgba(70, 70, 90, ${brightness * 0.8})`;
-                    highlightColor = `rgba(140, 140, 170, ${brightness})`;
-                } else {
-                    baseColor = `rgba(220, 230, 240, ${brightness})`;
-                    highlightColor = `rgba(255, 255, 255, ${brightness * 0.9})`;
+            // 绘制星星
+            const cx = star.cx * w;
+            const cy = star.cy * h;
+            console.log('绘制星星，中心坐标：', cx, cy, '画布尺寸：', w, h);
+            starFrame.forEach(([dx, dy], index) => {
+                const x = cx + dx * star.blockW;
+                const y = cy + dy * star.blockH;
+                ctx.fillStyle = star.color;
+                ctx.fillRect(x, y, star.blockW, star.blockH);
+                // 可选：每10个点输出一次，避免刷屏
+                if (index % 10 === 0) {
+                    console.log(`  点 ${index}: dx=${dx}, dy=${dy}, 绘制位置 (${x}, ${y})`);
                 }
+            });
 
-                ctx.beginPath();
-                ctx.ellipse(cx, cy, w * 0.5, h * 0.4, 0, 0, 2 * Math.PI);
-                ctx.ellipse(cx - w * 0.3, cy - h * 0.2, w * 0.4, h * 0.3, 0, 0, 2 * Math.PI);
-                ctx.ellipse(cx + w * 0.3, cy + h * 0.1, w * 0.4, h * 0.3, 0, 0, 2 * Math.PI);
-                ctx.fillStyle = baseColor;
-                ctx.fill();
-
-                ctx.save();
-                ctx.shadowColor = 'rgba(255, 255, 200, 0.6)';
-                ctx.shadowBlur = 15 * scale;
-                ctx.beginPath();
-                ctx.ellipse(cx - w * 0.1, cy - h * 0.15, w * 0.2, h * 0.15, 0, 0, 2 * Math.PI);
-                ctx.fillStyle = highlightColor;
-                ctx.fill();
-                ctx.restore();
-
-                ctx.save();
-                ctx.shadowColor = 'rgba(255, 220, 150, 0.5)';
-                ctx.shadowBlur = 20 * scale;
-                ctx.beginPath();
-                ctx.ellipse(cx + w * 0.2, cy - h * 0.1, w * 0.3, h * 0.2, 0, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgba(255, 240, 200, 0.3)';
-                ctx.fill();
-                ctx.restore();
-            }
-
-            // ========== 动画循环 ==========
-            function draw() {
-                const w = canvas.width = window.innerWidth;
-                const h = canvas.height = window.innerHeight;
-                ctx.clearRect(0, 0, w, h);
-
-                // 绘制云朵
-                clouds.forEach(cloud => {
-                    cloud.x += cloud.speed * CONFIG.CLOUD_SPEED;
-                    if (cloud.x > 100 + 20) cloud.x = -20;
-                    if (cloud.x < -20) cloud.x = 100 + 20;
-                    const cx = (cloud.x / 100) * w;
-                    const cy = cloud.y * h;
-                    drawCloud(ctx, cx, cy, cloud.scale, cloud.type, cloud.brightness);
-                });
-
-                // 绘制静态小星星（1x1白点）
-                staticStars.forEach(star => {
-                    const px = star.x * w;
-                    const py = star.y * h;
-                    ctx.fillStyle = `rgba(255, 255, 220, ${0.5 + Math.random()*0.3})`;
-                    ctx.fillRect(px, py, 1, 1);
-                });
-
-                // 绘制动态大星星（不同尺寸）
-                const time = Date.now() / 200;
-                dynamicStars.forEach(star => {
-                    const t = Math.sin(time * star.speed + star.phaseOffset);
-                    const norm = (t + 1) / 2;
-                    let frameIndex;
-                    if (norm < 0.5) {
-                        frameIndex = Math.floor((norm * 2) * MAX_FRAME);
-                    } else {
-                        frameIndex = Math.floor((1 - (norm - 0.5) * 2) * MAX_FRAME);
-                    }
-                    frameIndex = Math.min(frameIndex, MAX_FRAME);
-                    const frame = starFrames[frameIndex];
-                    if (!frame) return;
-
-                    const cx = star.x * w;
-                    const cy = star.y * h;
-                    const bw = star.blockW;
-                    const bh = star.blockH;
-                    frame.forEach(([dx, dy]) => {
-                        ctx.fillStyle = '#FFE68F'; // 金色
-                        // 每个逻辑像素块绘制为 bw x bh 的矩形
-                        ctx.fillRect(cx + dx * bw, cy + dy * bh, bw, bh);
-                    });
-                });
-
-                // 绘制流星
-                meteors.forEach(meteor => {
-                    const length = meteor.length;
-                    const angle = meteor.angle;
-                    for (let i = 0; i < 10; i++) {
-                        const seg = i / 10;
-                        const segX = meteor.x - Math.cos(angle) * length * seg;
-                        const segY = meteor.y - Math.sin(angle) * length * seg;
-                        const alpha = 0.8 * (1 - seg);
-                        ctx.fillStyle = `rgba(255, 255, 210, ${alpha})`;
-                        ctx.beginPath();
-                        ctx.arc(segX, segY, 2 + seg * 2, 0, 2 * Math.PI);
-                        ctx.fill();
-                    }
-
-                    meteor.x += Math.cos(angle) * meteor.speed;
-                    meteor.y += Math.sin(angle) * meteor.speed;
-
-                    if (meteor.x > w + 100 || meteor.x < -100 || meteor.y > h + 100 || meteor.y < -100) {
-                        Object.assign(meteor, spawnMeteor());
-                    }
-                });
-
-                requestAnimationFrame(draw);
-            }
-
-            draw();
-        })();
+            requestAnimationFrame(draw);
+        }
+        draw();
+        console.log('动画循环已启动');
     </script>
 </body>
 </html>
