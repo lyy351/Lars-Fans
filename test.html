@@ -1,30 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>像素背景完整版（已调试）</title>
     <style>
-        body { margin:0; background:#0a0f1e; }
-        #testCanvas {
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0f1e; /* 深色底衬，画布透明 */
+        }
+        #bgCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             display: block;
+            image-rendering: pixelated;   /* 保持像素锐利 */
+            background: transparent;
+            pointer-events: none;          /* 鼠标穿透 */
+            z-index: -1;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            color: white;
+            text-shadow: 0 2px 5px black;
+            font-family: system-ui, sans-serif;
         }
     </style>
 </head>
 <body>
-    <canvas id="testCanvas"></canvas>
-    <div style="color:white; padding:20px; position:relative; z-index:1;">
-        如果看到红色方块，说明画布正常
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="content">
+        <h1>✨ 调试通过版：星星 + 流星 + 云朵 ✨</h1>
+        <p>动态四角星（✨形）、静态小星、流星、乌云/白云（高光/光影）</p>
     </div>
+
     <script>
-        const canvas = document.getElementById('testCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        ctx.fillStyle = 'red';
-        ctx.fillRect(100, 100, 200, 200); // 红色方块
+        (function() {
+            const canvas = document.getElementById('bgCanvas');
+            if (!canvas) { console.error('Canvas not found'); return; }
+            const ctx = canvas.getContext('2d');
+
+            // ========== 配置 ==========
+            const CONFIG = {
+                STAR_DYNAMIC_COUNT: 12,      // 动态大星星数量
+                STAR_STATIC_COUNT: 30,        // 静态小星星数量
+                CLOUD_COUNT: 8,                // 云朵数量
+                METEOR_COUNT: 2,                // 流星数量
+                METEOR_SPEED: 3,                 // 流星速度（像素/帧）
+                STAR_BASE_SIZE: 4,                // 星星像素块放大倍数
+                CLOUD_SPEED: 0.2,                 // 云朵水平移动速度（百分比/帧）
+            };
+
+            // ========== 星星帧数据（中心16,16）==========
+            const rawFrames = [
+                [], // 0
+                [{x:14, y:14}], // 1
+                [{x:14,y:14}, {x:14,y:10}, {x:14,y:18}, {x:10,y:14}, {x:18,y:14}], // 2
+                [{x:14,y:6}, {x:14,y:14}, {x:14,y:22}, {x:6,y:14}, {x:22,y:14}, {x:10,y:10}, {x:18,y:10}, {x:10,y:18}, {x:18,y:18}], // 3
+                [{x:14,y:2}, {x:14,y:6}, {x:14,y:14}, {x:14,y:22}, {x:14,y:26}, {x:2,y:14}, {x:6,y:14}, {x:22,y:14}, {x:26,y:14}, {x:8,y:8}, {x:20,y:8}, {x:8,y:20}, {x:20,y:20}], // 4
+                [{x:14,y:0}, {x:14,y:4}, {x:14,y:8}, {x:14,y:14}, {x:14,y:20}, {x:14,y:24}, {x:14,y:28}, {x:0,y:14}, {x:4,y:14}, {x:8,y:14}, {x:20,y:14}, {x:24,y:14}, {x:28,y:14}, {x:6,y:6}, {x:22,y:6}, {x:6,y:22}, {x:22,y:22}] // 5
+            ];
+            const starFrames = rawFrames.map(frame => frame.map(p => [p.x - 16, p.y - 16]));
+            const MAX_FRAME = starFrames.length - 1; // 5
+
+            // ========== 动态星星数据 ==========
+            let dynamicStars = [];
+            for (let i = 0; i < CONFIG.STAR_DYNAMIC_COUNT; i++) {
+                dynamicStars.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    phaseOffset: Math.random() * 2 * Math.PI,
+                    speed: 0.5 + Math.random() * 0.8,
+                });
+            }
+
+            // ========== 静态小星星 ==========
+            let staticStars = [];
+            for (let i = 0; i < CONFIG.STAR_STATIC_COUNT; i++) {
+                staticStars.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    size: 1 + Math.floor(Math.random() * 2), // 1或2
+                });
+            }
+
+            // ========== 云朵数据 ==========
+            let clouds = [];
+            for (let i = 0; i < CONFIG.CLOUD_COUNT; i++) {
+                clouds.push({
+                    x: Math.random() * 100,        // 水平位置百分比
+                    y: 0.2 + Math.random() * 0.6,   // 垂直位置 0.2~0.8
+                    scale: 0.8 + Math.random() * 1.5,
+                    type: Math.random() > 0.5 ? 'dark' : 'light',
+                    brightness: 0.6 + Math.random() * 0.4,
+                    speed: (0.1 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1),
+                });
+            }
+
+            // ========== 流星数据（使用像素坐标）==========
+            let meteors = [];
+            function spawnMeteor() {
+                return {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight * 0.3, // 上方30%区域
+                    length: 30 + Math.random() * 40,
+                    speed: CONFIG.METEOR_SPEED * (0.8 + Math.random() * 0.6),
+                    angle: (Math.random() * 20 - 10) * Math.PI / 180, // -10°～10°
+                };
+            }
+            for (let i = 0; i < CONFIG.METEOR_COUNT; i++) {
+                meteors.push(spawnMeteor());
+            }
+
+            // ========== 绘制云朵 ==========
+            function drawCloud(ctx, cx, cy, scale, type, brightness) {
+                const w = 60 * scale;
+                const h = 30 * scale;
+                let baseColor, highlightColor;
+                if (type === 'dark') {
+                    baseColor = `rgba(70, 70, 90, ${brightness * 0.8})`;
+                    highlightColor = `rgba(140, 140, 170, ${brightness})`;
+                } else {
+                    baseColor = `rgba(220, 230, 240, ${brightness})`;
+                    highlightColor = `rgba(255, 255, 255, ${brightness * 0.9})`;
+                }
+
+                // 三个椭圆组成云朵
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, w * 0.5, h * 0.4, 0, 0, 2 * Math.PI);
+                ctx.ellipse(cx - w * 0.3, cy - h * 0.2, w * 0.4, h * 0.3, 0, 0, 2 * Math.PI);
+                ctx.ellipse(cx + w * 0.3, cy + h * 0.1, w * 0.4, h * 0.3, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = baseColor;
+                ctx.fill();
+
+                // 高光（左上角光源）
+                ctx.save();
+                ctx.shadowColor = 'rgba(255, 255, 200, 0.6)';
+                ctx.shadowBlur = 15 * scale;
+                ctx.beginPath();
+                ctx.ellipse(cx - w * 0.1, cy - h * 0.15, w * 0.2, h * 0.15, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = highlightColor;
+                ctx.fill();
+                ctx.restore();
+
+                // 边缘光晕（阳光）
+                ctx.save();
+                ctx.shadowColor = 'rgba(255, 220, 150, 0.5)';
+                ctx.shadowBlur = 20 * scale;
+                ctx.beginPath();
+                ctx.ellipse(cx + w * 0.2, cy - h * 0.1, w * 0.3, h * 0.2, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255, 240, 200, 0.3)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // ========== 动画循环 ==========
+            function draw() {
+                const w = canvas.width = window.innerWidth;
+                const h = canvas.height = window.innerHeight;
+                ctx.clearRect(0, 0, w, h);
+
+                // ---------- 绘制云朵 ----------
+                clouds.forEach(cloud => {
+                    cloud.x += cloud.speed * CONFIG.CLOUD_SPEED;
+                    if (cloud.x > 100 + 20) cloud.x = -20;
+                    if (cloud.x < -20) cloud.x = 100 + 20;
+
+                    const cx = (cloud.x / 100) * w;
+                    const cy = cloud.y * h;
+                    drawCloud(ctx, cx, cy, cloud.scale, cloud.type, cloud.brightness);
+                });
+
+                // ---------- 绘制静态小星星 ----------
+                staticStars.forEach(star => {
+                    const px = star.x * w;
+                    const py = star.y * h;
+                    const sz = star.size * 2;
+                    ctx.fillStyle = `rgba(255, 255, 200, ${0.6 + Math.random() * 0.2})`;
+                    ctx.fillRect(px - sz/2, py - sz/2, sz, sz);
+                });
+
+                // ---------- 绘制动态大星星 ----------
+                const time = Date.now() / 200;
+                dynamicStars.forEach(star => {
+                    const t = Math.sin(time * star.speed + star.phaseOffset);
+                    const normalized = (t + 1) / 2; // 0..1
+                    // 帧索引：0-5-0 来回
+                    let frameIndex;
+                    if (normalized < 0.5) {
+                        frameIndex = Math.floor((normalized * 2) * MAX_FRAME);
+                    } else {
+                        frameIndex = Math.floor((1 - (normalized - 0.5) * 2) * MAX_FRAME);
+                    }
+                    frameIndex = Math.min(frameIndex, MAX_FRAME);
+                    const frame = starFrames[frameIndex];
+                    if (!frame) return;
+
+                    const cx = star.x * w;
+                    const cy = star.y * h;
+                    const scale = CONFIG.STAR_BASE_SIZE;
+                    frame.forEach(([dx, dy]) => {
+                        ctx.fillStyle = '#FFE793';
+                        ctx.fillRect(cx + dx * scale, cy + dy * scale, scale, scale);
+                    });
+                });
+
+                // ---------- 绘制流星 ----------
+                meteors.forEach(meteor => {
+                    // 轨迹
+                    const length = meteor.length;
+                    const angle = meteor.angle;
+                    for (let i = 0; i < 10; i++) {
+                        const seg = i / 10;
+                        const segX = meteor.x - Math.cos(angle) * length * seg;
+                        const segY = meteor.y - Math.sin(angle) * length * seg;
+                        const alpha = 0.8 * (1 - seg);
+                        ctx.fillStyle = `rgba(255, 255, 210, ${alpha})`;
+                        ctx.beginPath();
+                        ctx.arc(segX, segY, 2 + seg * 3, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+
+                    // 更新位置
+                    meteor.x += Math.cos(angle) * meteor.speed;
+                    meteor.y += Math.sin(angle) * meteor.speed;
+
+                    // 飞出屏幕重新生成
+                    if (meteor.x > w + 100 || meteor.x < -100 || meteor.y > h + 100 || meteor.y < -100) {
+                        Object.assign(meteor, spawnMeteor());
+                    }
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        })();
     </script>
 </body>
 </html>
