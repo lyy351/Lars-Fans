@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>像素背景示例</title>
+    <style>
+        /* 重置内外边距，让画布覆盖全屏 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden; /* 防止滚动条干扰 */
+        }
+
+        /* 背景画布：固定覆盖全屏，置于底层 */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            /* 保持像素锐利 */
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            background: transparent;  /* 透明背景 */
+            pointer-events: none;     /* 让鼠标穿透画布，可以直接点击下面的内容 */
+            z-index: -1;              /* 确保在所有内容后面 */
+        }
+
+        /* 示例内容 - 你的博客内容可以放在这里 */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            color: white;
+            text-shadow: 0 2px 5px black;
+            font-family: system-ui, sans-serif;
+        }
+
+        /* 给个深色背景衬托星星，实际背景透明，内容区自己设置背景色 */
+        body {
+            background-color: #0a0f1e; /* 深色底衬，你也可以用自己博客的背景 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景画布：所有星星和乌云都会画在这里 -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- 你的博客内容区域（示例） -->
+    <div class="content">
+        <h1>✨ 闪烁的星星 & 飘动的乌云 ✨</h1>
+        <p>背景透明，鼠标可以穿透画布，正常点击链接或按钮。</p>
+        <p>总共有 15 颗星星和 5 朵乌云。</p>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // ========== 配置参数 ==========
+            const STAR_COUNT = 15;          // 星星数量
+            const CLOUD_COUNT = 5;           // 乌云数量
+            const MAX_STAR_SIZE = 5;          // 星星最大“半径”（扩散时的最远距离，对应像素偏移范围）
+            const CLOUD_SPEED = 0.3;           // 乌云移动速度（像素/帧）
+            const ANIMATION_SPEED = 0.02;      // 星星闪烁速度（弧度增量/帧）
+
+            // ========== 星星数据 ==========
+            // 每颗星星包含: x, y (位置，0~1相对坐标), phase (当前动画相位), speed (速度系数)
+            let stars = [];
+            for (let i = 0; i < STAR_COUNT; i++) {
+                stars.push({
+                    x: Math.random(),          // 相对坐标 0~1
+                    y: Math.random(),
+                    phase: Math.random() * Math.PI * 2, // 随机初始相位
+                    speed: 0.8 + Math.random() * 0.6,    // 0.8~1.4 倍速
+                });
+            }
+
+            // ========== 乌云数据 ==========
+            // 每朵乌云: x, y (绝对像素坐标，为了飘动方便用像素), 
+            // 以及形状的随机种子（简单起见，我们绘制固定形状的云）
+            let clouds = [];
+            const cloudBaseY = []; // 存储每朵云的基准Y（避免飘出太远）
+            for (let i = 0; i < CLOUD_COUNT; i++) {
+                clouds.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    speedX: (Math.random() - 0.5) * 0.5, // -0.25~0.25
+                    speedY: (Math.random() - 0.5) * 0.2, // -0.1~0.1
+                });
+            }
+
+            // ========== 预生成星星的像素偏移 ==========
+            // 沿用之前单颗星星的像素偏移数组（基于中心0,0）
+            function generateStarOffsets(maxDist = 5) {
+                const offsets = [];
+                // 简单生成一个四角星形状：主轴和对角线组合，按切比雪夫距离排序
+                for (let dy = -maxDist; dy <= maxDist; dy++) {
+                    for (let dx = -maxDist; dx <= maxDist; dx++) {
+                        const dist = Math.max(Math.abs(dx), Math.abs(dy));
+                        // 只保留需要的形状：例如尖角和对角线填充
+                        // 这里采用类似之前的逻辑：保留所有 dist<=maxDist 的点，但可加权重，为简化全保留
+                        // 但为了星星更清晰，可以剔除一些点，我们简单全保留，形状会是个填充的菱形/方形混合，效果也不错
+                        // 也可以专门设计四角星形状，为了代码简洁，我们直接全保留，看起来会像方形的星星，你也可以自行调整
+                        // 但为了更像四角星，我们限制一下：保留主轴和副轴
+                        if (Math.abs(dx) === Math.abs(dy) || dx === 0 || dy === 0) {
+                            offsets.push({ dx, dy, dist });
+                        } else if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
+                            // 中心附近的小点也保留
+                            offsets.push({ dx, dy, dist });
+                        }
+                        // 你可以根据需要增加更多条件，这里为简单，所有点都加入，会变成一个填充的方形星星
+                        // 实际效果也可以接受
+                    }
+                }
+                // 去重（可能重复，但上面生成不会重复）
+                return offsets;
+            }
+
+            // 生成最大尺寸为5的星星像素点
+            const starOffsets = [];
+            for (let dy = -MAX_STAR_SIZE; dy <= MAX_STAR_SIZE; dy++) {
+                for (let dx = -MAX_STAR_SIZE; dx <= MAX_STAR_SIZE; dx++) {
+                    // 简单形状：所有点都加进去，会形成菱形（切比雪夫距离<=MAX_STAR_SIZE的方形区域）
+                    // 为了更像星星，我们只取 dx,dy 绝对值相等或一个为0的点？但那样太稀疏。
+                    // 这里采用较简单的方形区域，视觉效果也不错，你可以修改成自己喜欢的形状。
+                    // 为了更像“四角星”，我们可以保留主轴和对角线，以及内部填充，但为了代码演示，就用全部点吧。
+                    // 如果你想要更精确的四角星，可以用之前的 rawOffsets 数组，但需要适应不同大小。
+                    // 此处为了简化，直接用全部点，效果是星星从中心方形扩散到更大的方形。
+                    // 如果你希望和之前单颗星一样，可以将下面的注释取消，使用预定义的列表。
+                    // 现在我们先使用“所有点”方案，显示为方形星星，你也可以自行替换。
+                    // 因为你要的是背景点缀，方形星星也很好看。
+                    // 注意：为了体现“四角星”的形状，我们可以使用一个预定义的掩码。
+                }
+            }
+
+            // 更精确的四角星偏移列表（基于之前的设计，但限制最大距离）
+            // 手动构造一个四角星形状（只保留主轴和对角线附近）
+            const preciseOffsets = [
+                [0,0],
+                // 距离1
+                [1,0],[-1,0],[0,1],[0,-1],
+                [1,1],[1,-1],[-1,1],[-1,-1],
+                // 距离2
+                [2,0],[-2,0],[0,2],[0,-2],
+                [2,1],[2,-1],[-2,1],[-2,-1],
+                [1,2],[1,-2],[-1,2],[-1,-2],
+                [2,2],[2,-2],[-2,2],[-2,-2],
+                // 距离3
+                [3,0],[-3,0],[0,3],[0,-3],
+                [3,1],[3,-1],[-3,1],[-3,-1],
+                [1,3],[1,-3],[-1,3],[-1,-3],
+                [3,2],[3,-2],[-3,2],[-3,-2],
+                [2,3],[2,-3],[-2,3],[-2,-3],
+                // 距离4 (如果需要)
+                [4,0],[-4,0],[0,4],[0,-4],
+                [4,1],[4,-1],[-4,1],[-4,-1],
+                [1,4],[1,-4],[-1,4],[-1,-4],
+                [4,2],[4,-2],[-4,2],[-4,-2],
+                [2,4],[2,-4],[-2,4],[-2,-4],
+                // 距离5
+                [5,0],[-5,0],[0,5],[0,-5],
+                [5,1],[5,-1],[-5,1],[-5,-1],
+                [1,5],[1,-5],[-1,5],[-1,-5],
+            ];
+            // 去重并计算dist
+            const starPixelOffsets = [];
+            const seen = new Set();
+            preciseOffsets.forEach(([dx, dy]) => {
+                const key = `${dx},${dy}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    const dist = Math.max(Math.abs(dx), Math.abs(dy));
+                    starPixelOffsets.push({ dx, dy, dist });
+                }
+            });
+            // 按dist排序
+            starPixelOffsets.sort((a,b) => a.dist - b.dist);
+
+            // 星星的最大像素数
+            const MAX_STAR_PIXELS = starPixelOffsets.length;
+
+            // ========== 绘制乌云 ==========
+            function drawCloud(ctx, x, y, size = 1.0) {
+                // 简单像素云：几个灰色矩形拼成
+                const w = 12 * size;
+                const h = 6 * size;
+                ctx.fillStyle = 'rgba(80, 80, 100, 0.9)'; // 半透明深灰
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = 'rgba(110, 110, 130, 0.9)';
+                ctx.fillRect(x + 3*size, y - 2*size, 8*size, 5*size);
+                ctx.fillStyle = 'rgba(60, 60, 80, 0.9)';
+                ctx.fillRect(x - 2*size, y + 2*size, 10*size, 5*size);
+                // 加点高光
+                ctx.fillStyle = 'rgba(200, 200, 220, 0.6)';
+                ctx.fillRect(x + 4*size, y - 1*size, 3*size, 2*size);
+            }
+
+            // ========== 动画循环 ==========
+            function drawBackground() {
+                // 调整画布尺寸与窗口匹配
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                canvas.width = w;
+                canvas.height = h;
+
+                // 清空为全透明
+                ctx.clearRect(0, 0, w, h);
+
+                // ----- 绘制乌云 -----
+                clouds.forEach(cloud => {
+                    // 更新位置（简单飘动）
+                    cloud.x += cloud.speedX;
+                    cloud.y += cloud.speedY;
+
+                    // 边界回绕（让云朵从另一边出现）
+                    if (cloud.x > w + 50) cloud.x = -50;
+                    if (cloud.x < -50) cloud.x = w + 50;
+                    if (cloud.y > h + 30) cloud.y = -30;
+                    if (cloud.y < -30) cloud.y = h + 30;
+
+                    // 绘制乌云（大小随机系数）
+                    const size = 1.5 + (cloud.speedX * 2); // 随便给点变化
+                    drawCloud(ctx, cloud.x, cloud.y, size);
+                });
+
+                // ----- 绘制星星 -----
+                stars.forEach(star => {
+                    // 更新相位
+                    star.phase += ANIMATION_SPEED * star.speed;
+                    // 计算当前显示比例 (0~1)，使用正弦波
+                    const t = (Math.sin(star.phase) + 1) / 2; // 0~1 之间
+                    // 映射到像素数量 (0 ~ MAX_STAR_PIXELS)
+                    const count = Math.floor(t * MAX_STAR_PIXELS);
+
+                    // 计算绝对像素坐标
+                    const x0 = star.x * w;
+                    const y0 = star.y * h;
+
+                    // 绘制星星的每个像素（相对于中心x0,y0）
+                    ctx.fillStyle = '#FFE793'; // 淡金色
+                    for (let i = 0; i < count; i++) {
+                        const { dx, dy } = starPixelOffsets[i];
+                        const px = Math.round(x0 + dx);
+                        const py = Math.round(y0 + dy);
+                        // 确保在画布内（可选）
+                        if (px >= 0 && px < w && py >= 0 && py < h) {
+                            ctx.fillRect(px, py, 1, 1);
+                        }
+                    }
+                });
+
+                requestAnimationFrame(drawBackground);
+            }
+
+            // 窗口大小变化时，画布自动调整，但星星位置是基于相对坐标，无需额外处理
+            window.addEventListener('resize', () => {
+                // 只是重置画布尺寸，动画循环中会重新设置 canvas.width/height
+                // 但注意星星位置基于相对坐标，不需要改变
+            });
+
+            // 启动动画
+            drawBackground();
+        })();
+    </script>
+</body>
+</html>
