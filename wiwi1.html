@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北极燕鸥与嘉兰百合 · 纸本质感排版</title>
+    <style>
+        /* 全局重置与背景 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #4a3f38;  /* 深色背景衬托纸张 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', '宋体', 'Songti SC', serif;
+            padding: 30px 15px;
+        }
+
+        /* 纸张卡片 —— 模拟有纹理的米色纸张 */
+        .paper {
+            max-width: 680px;
+            width: 100%;
+            background-color: #f7f3e8;       /* 暖白纸基色 */
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(200, 180, 150, 0.15) 0.5px, transparent 0.5px),
+                radial-gradient(circle at 70% 85%, rgba(160, 140, 120, 0.1) 1px, transparent 1px),
+                linear-gradient(45deg, rgba(0,0,0,0.02) 0.5px, transparent 0.5px);
+            background-size: 40px 40px, 60px 60px, 20px 20px;  /* 两层杂点纹理 */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 5px 10px rgba(0,0,0,0.2), inset 0 0 0 1px #e8dccc, inset 0 0 20px #e3d5c0;
+            border-radius: 2px;                /* 微微圆角，更自然 */
+            padding: 55px 58px 60px 58px;
+            position: relative;
+            line-height: 1.7;
+            color: #2b2b28;
+            font-size: 17px;
+            letter-spacing: 0.02em;
+        }
+
+        /* 左上角的数字 (754) */
+        .page-number {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            font-size: 20px;
+            font-weight: 400;
+            color: #b7a68b;
+            letter-spacing: 1px;
+            font-family: 'Avenir', 'Helvetica Neue', sans-serif;
+            opacity: 0.8;
+        }
+
+        /* 标题上方的细装饰线 */
+        .title-decoration {
+            margin-top: 25px;        /* 给数字留出空间 */
+            border-top: 1px solid #dacfbe;
+            width: 60px;
+            margin-bottom: 18px;
+        }
+
+        /* 主标题 “02 北极燕鸥与嘉兰百合” */
+        .main-title {
+            font-size: 28px;
+            font-weight: 500;
+            color: #3f352b;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* 正文段落 */
+        .content p {
+            text-indent: 2em;          /* 首行缩进2字符 */
+            margin: 0.8em 0;
+            word-break: break-word;
+            text-align: justify;        /* 两端对齐 */
+            font-feature-settings: "kern" 1;
+            font-kerning: normal;
+        }
+
+        /* 特殊处理第一段首字 (可选, 不加也可) */
+        .content p:first-of-type::first-letter {
+            font-size: 2.2em;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+            color: #5e4f3e;
+            font-weight: 500;
+            font-family: 'Times New Roman', serif;
+        }
+
+        /* 结尾省略符号或装饰 */
+        .ellipsis {
+            text-align: right;
+            font-size: 28px;
+            color: #cbbca7;
+            margin-top: 20px;
+            letter-spacing: 5px;
+        }
+
+        /* 页脚 (模拟页码或日期) */
+        .footer {
+            margin-top: 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #b09f8a;
+            border-top: 1px dashed #dacfbe;
+            padding-top: 15px;
+            font-style: italic;
+        }
+        .footer .page {
+            font-style: normal;
+            letter-spacing: 2px;
+        }
+        .footer .dash {
+            font-size: 18px;
+            opacity: 0.6;
+        }
+
+        /* 引用样式 (如果有) */
+        .quote {
+            font-style: italic;
+            color: #6b5b48;
+            border-left: 3px solid #cbb69b;
+            padding-left: 20px;
+            margin: 20px 0 20px 2em;
+        }
+
+        /* 小字注释 */
+        .footnote {
+            font-size: 14px;
+            color: #8f806d;
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        /* 适应移动端 */
+        @media (max-width: 550px) {
+            .paper { padding: 35px 25px; }
+            .main-title { font-size: 24px; }
+            .page-number { top: 20px; left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="paper">
+        <!-- 左上角数字 -->
+        <div class="page-number">754</div>
+
+        <!-- 标题上方装饰线 -->
+        <div class="title-decoration"></div>
+
+        <!-- 主标题 -->
+        <h1 class="main-title">02 北极燕鸥与嘉兰百合</h1>
+
+        <!-- 正文内容（完全按照图片中的文字，并保留原有换行） -->
+        <div class="content">
+            <p>这就是文朝菌的两次生命。</p>
+            <p>第一次，作为海星，在黑暗和寒冷中，和无数的海洋生灵组成海洋冰柱的星纹，无知地走向死亡，恍惚以为梦。那时，她在北冰洋。</p>
+            <p>第二次，她是初孵的飞鱼，十几日见证瑰丽的海底，最终成为她之所向的口中餐，未经咀嚼完好地被吞咽，心脏被蚀成沙砾大小的晶石，又与骨血一同被胃液淹没炼化，成为他的一部分。十几日，她一直处在浅海区，所以她游高一点，便尚且能从光线变化猜测日升月落，她这一次生命完结前，倘若再往前游十几米，她便能见到深海的模样。</p>
+            <p>当然，这一切的细节，文朝菌无从知晓。</p>
+            <p>在化作飞鸟的头几个月里，她总算可以在一个相对稳定的环境来思考自己前面的遭遇，但她</p>
+            <!-- 原文中断于此，保留原样，不加狗尾续貂 -->
+        </div>
+
+        <!-- 添加一点省略感，与图片中可能存在的“……”呼应 -->
+        <div class="ellipsis">······</div>
+
+        <!-- 页脚部分，自由设计 -->
+        <div class="footer">
+            <span class="page">——  ✦  ——</span>
+            <span>北极燕鸥 · 嘉兰百合</span>
+            <span class="dash">✧  ✧  ✧</span>
+        </div>
+
+        <!-- 隐藏的辅助说明：完全使用纯代码实现背景纹理和排版，无任何外部图片 -->
+    </div>
+
+    <!-- 注：背景纹理通过多重radial-gradient模拟纸张杂点，无需图片，纯css实现。 -->
+</body>
+</html>
