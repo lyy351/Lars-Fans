@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GIF 转彩色像素帧</title>
+    <style>
+        body{font-family:sans-serif;padding:20px;background:#1a1a2e;color:white;}
+        canvas{border:1px solid #666;image-rendering:pixelated;background:#333;}
+        #output{background:#333;padding:10px;border-radius:5px;font-family:monospace;white-space:pre-wrap;word-break:break-all;max-height:400px;overflow:auto;}
+        .frame-container{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;}
+        .frame-item{text-align:center;}
+        .frame-item canvas{width:64px;height:64px;}
+        button{margin-top:10px;padding:8px 16px;}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/gif-frames@1.0.1/gif-frames.min.js"></script>
+</head>
+<body>
+<h2>✨ GIF → 彩色多帧像素坐标 ✨</h2>
+<p>上传你画好的像素GIF，自动提取每一帧的像素点（含颜色），生成可直接用的帧数组。</p>
+<input type="file" id="upload" accept="image/gif">
+<div class="frame-container" id="frameContainer"></div>
+<pre id="output">等待上传...</pre>
+<script>
+document.getElementById('upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const arrayBuffer = ev.target.result;
+        gifFrames({ url: arrayBuffer, frames: 'all', outputType: 'canvas' }).then(function(frameData) {
+            const frames = [];
+            const container = document.getElementById('frameContainer');
+            container.innerHTML = '';
+
+            frameData.forEach((frame, index) => {
+                const canvas = frame.getImage();
+                const w = canvas.width;
+                const h = canvas.height;
+                const ctx = canvas.getContext('2d');
+                const imageData = ctx.getImageData(0,0,w,h).data;
+
+                // 提取每个不透明像素的坐标和颜色
+                const points = [];
+                for (let y=0; y<h; y++) {
+                    for (let x=0; x<w; x++) {
+                        const i = (y*w + x)*4;
+                        const alpha = imageData[i+3];
+                        if (alpha > 0) {
+                            const r = imageData[i];
+                            const g = imageData[i+1];
+                            const b = imageData[i+2];
+                            const a = alpha / 255; // 归一化 alpha
+                            // 转换为以中心为原点的坐标（假设画布32x32，中心在16）
+                            const dx = x - 16;
+                            const dy = y - 16;
+                            points.push({
+                                dx: dx,
+                                dy: dy,
+                                color: `rgba(${r},${g},${b},${a})`
+                            });
+                        }
+                    }
+                }
+                frames.push(points);
+
+                // 显示小预览（用原图缩小显示）
+                const div = document.createElement('div');
+                div.className = 'frame-item';
+                const previewCanvas = document.createElement('canvas');
+                previewCanvas.width = 32;
+                previewCanvas.height = 32;
+                const pCtx = previewCanvas.getContext('2d');
+                pCtx.clearRect(0,0,32,32);
+                pCtx.drawImage(canvas, 0, 0, 32, 32);
+                previewCanvas.style.width = '64px';
+                previewCanvas.style.height = '64px';
+                div.appendChild(previewCanvas);
+                div.appendChild(document.createTextNode(`帧 ${index+1}`));
+                container.appendChild(div);
+            });
+
+            // 输出整个 frames 数组（带颜色）
+            document.getElementById('output').textContent = JSON.stringify(frames, null, 2);
+        }).catch(err => {
+            document.getElementById('output').textContent = '解析出错：' + err;
+        });
+    };
+    reader.readAsArrayBuffer(file);
+});
+</script>
+</body>
+</html>
