@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>雨丝背景 · 北极燕鸥与嘉兰百合</title>
+    <title>零散雨丝 · 北极燕鸥与嘉兰百合</title>
     <style>
         /* 预览版样式 (无 #workskin 前缀) */
         * {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #a1b7d4;  /* 柔蓝灰背景，突出纸张 */
+            background: #9fb3cf;  /* 中蓝灰背景，突出纸张 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,43 +22,76 @@
             padding: 30px 15px;
         }
 
-        /* 纸张：极浅蓝白底 + 多层白色细斜线（雨丝效果） */
+        /* 纸张：蓝色调白底 + 零散白色斜短线（45°，长度≈1-2字） */
         .paper {
             max-width: 800px;
             width: 100%;
-            background-color: #eef5fc;   /* 浅蓝白 */
-            /* 雨丝纹理：多层细线，不同角度、间距、偏移，营造自然雨丝感 */
+            background-color: #eaf0fd;   /* 浅蓝白 */
+            /* 多重背景：每个linear-gradient是一条45°白色短线 */
             background-image: 
-                /* 第一层：45°细线，间距28px，略粗一点但细 */
-                repeating-linear-gradient(45deg, 
-                    rgba(255, 255, 255, 0.3) 0px, 
-                    rgba(255, 255, 255, 0.3) 1px, 
-                    transparent 1px, 
-                    transparent 28px),
-                /* 第二层：-30°细线，间距22px */
-                repeating-linear-gradient(-30deg, 
-                    rgba(255, 255, 255, 0.25) 0px, 
-                    rgba(255, 255, 255, 0.25) 1px, 
-                    transparent 1px, 
-                    transparent 22px),
-                /* 第三层：60°细线，间距35px，起始偏移 */
-                repeating-linear-gradient(60deg, 
-                    rgba(255, 255, 255, 0.2) 0px, 
-                    rgba(255, 255, 255, 0.2) 1px, 
-                    transparent 1px, 
-                    transparent 35px),
-                /* 第四层：15°细线，间距40px */
-                repeating-linear-gradient(15deg, 
-                    rgba(255, 255, 255, 0.18) 0px, 
-                    rgba(255, 255, 255, 0.18) 1px, 
-                    transparent 1px, 
-                    transparent 40px),
-                /* 第五层：75°细线，间距25px，增加稀疏感 */
-                repeating-linear-gradient(75deg, 
-                    rgba(255, 255, 255, 0.22) 0px, 
-                    rgba(255, 255, 255, 0.22) 1px, 
-                    transparent 1px, 
-                    transparent 25px);
+                /* 短线1 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线2 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
+                /* 短线3 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
+                /* 短线4 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
+                /* 短线5 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
+                /* 短线6 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
+                /* 短线7 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线8 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
+                /* 短线9 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
+                /* 短线10 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
+                /* 短线11 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
+                /* 短线12 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线13 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
+                /* 短线14 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
+                /* 短线15 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
+                /* 短线16 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
+                /* 短线17 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线18 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
+                /* 短线19 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
+                /* 短线20 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%);
+            background-size: 
+                22px 2px,   /* 短线1 长度约22px */
+                30px 2px,   /* 短线2 */
+                18px 2px,   /* 短线3 */
+                26px 2px,   /* 短线4 */
+                34px 2px,   /* 短线5 */
+                20px 2px,   /* 短线6 */
+                28px 2px,   /* 短线7 */
+                24px 2px,   /* 短线8 */
+                32px 2px,   /* 短线9 */
+                21px 2px,   /* 短线10 */
+                29px 2px,   /* 短线11 */
+                25px 2px,   /* 短线12 */
+                33px 2px,   /* 短线13 */
+                19px 2px,   /* 短线14 */
+                27px 2px,   /* 短线15 */
+                23px 2px,   /* 短线16 */
+                31px 2px,   /* 短线17 */
+                17px 2px,   /* 短线18 */
+                35px 2px,   /* 短线19 */
+                22px 2px;   /* 短线20 */
+            background-position: 
+                12% 18%,    /* 短线1 */
+                65% 30%,    /* 短线2 */
+                82% 55%,    /* 短线3 */
+                37% 72%,    /* 短线4 */
+                53% 42%,    /* 短线5 */
+                28% 86%,    /* 短线6 */
+                91% 14%,    /* 短线7 */
+                44% 33%,    /* 短线8 */
+                76% 67%,    /* 短线9 */
+                19% 49%,    /* 短线10 */
+                58% 78%,    /* 短线11 */
+                33% 22%,    /* 短线12 */
+                69% 91%,    /* 短线13 */
+                47% 59%,    /* 短线14 */
+                84% 37%,    /* 短线15 */
+                15% 63%,    /* 短线16 */
+                51% 81%,    /* 短线17 */
+                73% 16%,    /* 短线18 */
+                26% 44%,    /* 短线19 */
+                62% 95%;    /* 短线20 */
+            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
             box-shadow: 0 20px 40px rgba(70, 100, 130, 0.3), 0 8px 16px rgba(50, 70, 100, 0.2), inset 0 0 0 1px #ffffff, inset 0 0 30px #ffffffcc;
             border-radius: 4px;
             padding: 70px 70px 75px 70px;
@@ -166,7 +199,7 @@
             font-size: 26px;
         }
 
-        /* 小点缀：白色雨滴符号（可选） */
+        /* 小点缀：白色短线装饰（可选） */
         .float-dot {
             position: absolute;
             bottom: 30px;
@@ -216,12 +249,12 @@
             <span class="extra-white">✧</span>                 <!-- 白 -->
         </div>
 
-        <!-- 极淡的装饰短线（雨丝意境） -->
+        <!-- 极淡的装饰点（可选） -->
         <div class="float-dot">·  ·  ·</div>
     </div>
 
     <!-- 说明：
-        - 背景为浅蓝白底色，叠加多层白色细斜线，不同角度、大间距，模拟雨丝。
+        - 背景为浅蓝白底色，叠加20条45°白色短线，长度随机20-35px（≈1-2字），零散分布。
         - 字体为深蓝、深紫、深粉色，清晰深色，正文字体20px，标题38px。
         - 用于AO3时，请在每条CSS规则的选择器前添加 #workskin（例如 .paper 改为 #workskin .paper）。
     -->
