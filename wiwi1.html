@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>零散雨丝 · 北极燕鸥与嘉兰百合</title>
+    <title>雨丝更长 · 北极燕鸥与嘉兰百合</title>
     <style>
         /* 预览版样式 (无 #workskin 前缀) */
         * {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #a7b8c9;  /* 中蓝灰背景，突出纸张 */
+            background: #8fa3c0;  /* 深蓝灰背景，突出纸张 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,54 +22,54 @@
             padding: 30px 15px;
         }
 
-        /* 纸张：底色采用 #e6f0ff + 零散白色斜短线（45°，长度≈1-2字） */
+        /* 纸张：底色加深 + 零散白色斜短线（45°，长度≈3-5字） */
         .paper {
             max-width: 800px;
             width: 100%;
-            background-color: #e6f0ff;   /* 您指定的极浅蓝白底色 */
-            /* 多重背景：每个linear-gradient是一条45°白色短线 */
+            background-color: #c9daf5;   /* 较深的蓝白底色（比 #e6f0ff 深） */
+            /* 多重背景：每个linear-gradient是一条45°白色短线，长度50-90px */
             background-image: 
-                /* 短线1 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线1 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
                 /* 短线2 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
-                /* 短线3 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
-                /* 短线4 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
-                /* 短线5 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
+                /* 短线3 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
+                /* 短线4 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.52) 48%, rgba(255,255,255,0.52) 52%, transparent 55%),
+                /* 短线5 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.58) 48%, rgba(255,255,255,0.58) 52%, transparent 55%),
                 /* 短线6 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
-                /* 短线7 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
-                /* 短线8 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
-                /* 短线9 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
-                /* 短线10 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
-                /* 短线11 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
-                /* 短线12 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
-                /* 短线13 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
-                /* 短线14 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
-                /* 短线15 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%),
+                /* 短线7 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
+                /* 短线8 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.62) 48%, rgba(255,255,255,0.62) 52%, transparent 55%),
+                /* 短线9 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.53) 48%, rgba(255,255,255,0.53) 52%, transparent 55%),
+                /* 短线10 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.59) 48%, rgba(255,255,255,0.59) 52%, transparent 55%),
+                /* 短线11 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.51) 48%, rgba(255,255,255,0.51) 52%, transparent 55%),
+                /* 短线12 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.56) 48%, rgba(255,255,255,0.56) 52%, transparent 55%),
+                /* 短线13 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.63) 48%, rgba(255,255,255,0.63) 52%, transparent 55%),
+                /* 短线14 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.54) 48%, rgba(255,255,255,0.54) 52%, transparent 55%),
+                /* 短线15 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
                 /* 短线16 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
-                /* 短线17 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 55%),
-                /* 短线18 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.7) 52%, transparent 55%),
-                /* 短线19 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
-                /* 短线20 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.65) 48%, rgba(255,255,255,0.65) 52%, transparent 55%);
+                /* 短线17 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.57) 48%, rgba(255,255,255,0.57) 52%, transparent 55%),
+                /* 短线18 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.64) 48%, rgba(255,255,255,0.64) 52%, transparent 55%),
+                /* 短线19 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.52) 48%, rgba(255,255,255,0.52) 52%, transparent 55%),
+                /* 短线20 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.61) 48%, rgba(255,255,255,0.61) 52%, transparent 55%);
             background-size: 
-                22px 2px,   /* 短线1 长度约22px */
-                30px 2px,   /* 短线2 */
-                18px 2px,   /* 短线3 */
-                26px 2px,   /* 短线4 */
-                34px 2px,   /* 短线5 */
-                20px 2px,   /* 短线6 */
-                28px 2px,   /* 短线7 */
-                24px 2px,   /* 短线8 */
-                32px 2px,   /* 短线9 */
-                21px 2px,   /* 短线10 */
-                29px 2px,   /* 短线11 */
-                25px 2px,   /* 短线12 */
-                33px 2px,   /* 短线13 */
-                19px 2px,   /* 短线14 */
-                27px 2px,   /* 短线15 */
-                23px 2px,   /* 短线16 */
-                31px 2px,   /* 短线17 */
-                17px 2px,   /* 短线18 */
-                35px 2px,   /* 短线19 */
-                22px 2px;   /* 短线20 */
+                62px 2px,   /* 短线1 长度≈62px */
+                78px 2px,   /* 短线2 */
+                54px 2px,   /* 短线3 */
+                71px 2px,   /* 短线4 */
+                85px 2px,   /* 短线5 */
+                59px 2px,   /* 短线6 */
+                66px 2px,   /* 短线7 */
+                73px 2px,   /* 短线8 */
+                80px 2px,   /* 短线9 */
+                55px 2px,   /* 短线10 */
+                68px 2px,   /* 短线11 */
+                75px 2px,   /* 短线12 */
+                90px 2px,   /* 短线13 */
+                61px 2px,   /* 短线14 */
+                77px 2px,   /* 短线15 */
+                52px 2px,   /* 短线16 */
+                64px 2px,   /* 短线17 */
+                82px 2px,   /* 短线18 */
+                69px 2px,   /* 短线19 */
+                56px 2px;   /* 短线20 */
             background-position: 
                 12% 18%,    /* 短线1 */
                 65% 30%,    /* 短线2 */
@@ -254,7 +254,7 @@
     </div>
 
     <!-- 说明：
-        - 背景底色为您指定的 #e6f0ff（极浅蓝白），叠加20条45°白色短线，长度随机20-35px（≈1-2字），零散分布。
+        - 背景底色加深为 #c9daf5，叠加20条45°白色短线，长度50-90px（约3-5字），零散分布。
         - 字体为深蓝、深紫、深粉色，清晰深色，正文字体20px，标题38px。
         - 用于AO3时，请在每条CSS规则的选择器前添加 #workskin（例如 .paper 改为 #workskin .paper）。
     -->
