@@ -3,313 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>乱七八槽的十月底 · 文字排版样式</title>
+    <title>乱七八槽的十月底 · 文字排版</title>
     <style>
-        /* 等线字体优先，回退方案 */
+        /* 全局样式：等线字体，背景模拟旧纸色 */
         body {
             font-family: "DengXian", "等线", "Microsoft YaHei", sans-serif;
-            background-color: #1e1e1e;   /* 深色图片背景，突出文字背景 */
+            background-color: #3a2e28;  /* 深色背景衬托纸张 */
             margin: 0;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
         }
 
-        /* 主卡片 – 模拟纸张，让文字背景块更明显 */
         .paper {
             max-width: 780px;
             width: 100%;
-            background-color: #f6f4f0;  /* 暖白底，像旧笔记纸 */
-            padding: 50px 60px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 4px;
+            background-color: #faf7f0;   /* 暖白纸色 */
+            padding: 60px 70px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border-radius: 6px;
         }
 
-        /* 所有文字行基本样式 */
-        .line {
+        /* 正文绿色 */
+        body, p, .green-text, .paragraph {
+            color: #2a5c2a;            /* 深绿色正文 */
             font-size: 18px;
-            line-height: 1.8;
-            margin: 0.6em 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;                 /* 与右侧标记的间距 */
+            line-height: 1.85;
         }
 
-        /* 左侧文字内容区域：可包裹背景色 */
-        .text-content {
-            flex: 1;                    /* 撑满剩余宽度 */
-            padding: 0 4px;              /* 让背景色块与文字有一点呼吸 */
-            border-radius: 4px;          /* 文字背景轻微圆角 (与图中相似) */
-            display: inline;             /* 保持内联，背景只包文字 */
-        }
-
-        /* 让背景只包裹文字（而非整行）—— 通过span实现 */
-        .text-bg {
-            display: inline;             /* 关键：背景紧紧包裹文本 */
-            padding: 0 4px;              /* 左右稍留空隙，上下不额外增加行高 */
-            border-radius: 4px;
-            line-height: inherit;
-            box-decoration-break: clone; /* 跨行时每行独立背景块 (更好看) */
-            -webkit-box-decoration-break: clone;
-        }
-
-        /* 橙色文字背景 */
-        .bg-orange {
-            background-color: #f9b83c;   /* 暖橙色，类似图中荧光笔 */
-            color: #1e1e1e;               /* 深色字保证对比 */
-        }
-        /* 绿色文字背景 */
-        .bg-green {
-            background-color: #9fcb8b;   /* 柔和豆绿 */
-            color: #1e1e1e;
-        }
-        /* 普通文字无背景，但也可以带一点浅色 */
-        .text-plain {
-            background-color: transparent;
-        }
-
-        /* ----- 右侧标记列 (橘色圆点、空心圆) ----- */
-        .markers {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;        /* 居右对齐 */
-            justify-content: flex-start;
-            min-width: 34px;               /* 留出空间放圆点 */
-            font-size: 22px;               /* 圆点大小 */
-            line-height: 1.8;               /* 与文字行高一致 */
-            color: #e67e22;                 /* 橘色 */
-            letter-spacing: 2px;
-            padding-top: 0.1em;              /* 微调对齐 */
-        }
-
-        /* 实心圆 */
-        .dot-filled {
+        /* 橙色用于二级标题、页脚、圆点、分隔线 */
+        .orange {
             color: #e67e22;
-            opacity: 0.9;
         }
-        /* 空心圆 (用unicode) */
-        .dot-outline {
-            color: #e67e22;
-            opacity: 0.85;
-        }
-        /* 也可用字符，图中是圆形标记，这里用 • (U+2022) 和 ◦ (U+25E6) 或者 ○ */
-        .dot-outline::before {
-            content: "○";                /* 空心圆 */
-            font-size: 1.2em;
-            display: inline-block;
-            transform: scale(1.1);
-        }
-        .dot-filled::before {
-            content: "●";                /* 实心圆 */
-            font-size: 1.2em;
-        }
-        /* 为了灵活控制显示，也可以用span直接放字符，但不影响居右 */
-        .markers span {
-            display: block;
+
+        /* 一级标题样式 (深色, 不加橙色) */
+        .title-level1 {
+            font-size: 40px;
+            font-weight: 600;
+            margin: 10px 0 6px 0;
             line-height: 1.2;
-            margin: 0.1em 0;
+            color: #3c2e24;              /* 深褐，与橙色区分 */
+            letter-spacing: 2px;
         }
 
-        /* 分隔线 (橘色短横线) */
+        /* 二级标题：橙色，右侧带圆点列 */
+        .title-level2 {
+            font-size: 26px;
+            font-weight: 500;
+            color: #e67e22;              /* 橙色 */
+            margin: 0;                    /* 由flex容器控制边距 */
+            line-height: 1.8;              /* 与圆点行高一致 */
+        }
+
+        /* 三级标题：使用深橙色或保留绿色？保持层级，采用深橙色但稍暗 */
+        .title-level3 {
+            font-size: 21px;
+            font-weight: 500;
+            color: #bf6b1f;              /* 稍暗的橙色，区别于二级 */
+            margin: 0.8em 0 0.3em 0;
+            line-height: 1.6;
+        }
+
+        /* 页脚小字橙色 */
+        .footer-note {
+            color: #e67e22;
+            font-size: 16px;
+            text-align: right;
+            margin-top: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 所有段落首行缩进2字符 */
+        p, .paragraph {
+            text-indent: 2em;
+            margin: 0.8em 0;
+        }
+
+        /* 去除不需要缩进的块（如标题、分隔线容器） */
+        h1, h2, h3, h4, .no-indent {
+            text-indent: 0;
+        }
+
+        /* 橙色分隔线 */
         .divider-orange {
             border: 0;
             border-top: 2px solid #e67e22;
-            width: 60px;
-            margin: 24px 0 24px auto;     /* 右对齐 (跟右侧标记对齐) */
-            opacity: 0.7;
+            width: 100px;
+            margin: 30px 0 40px 0;        /* 默认左对齐，但可根据需要调整 */
         }
 
-        /* 标题上方的居右对齐行 (包含圆点与文字) */
-        .right-marker-line {
+        /* 居右对齐的分隔线（用于结尾） */
+        .divider-right {
+            border: 0;
+            border-top: 2px solid #e67e22;
+            width: 120px;
+            margin: 40px 0 20px auto;      /* 右对齐 */
+        }
+
+        /* 一级标题上方的圆点行 (居右，三个竖排圆点) */
+        .top-dots {
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 0px;
-            margin-top: 10px;
-            font-size: 18px;
+            flex-direction: column;
+            align-items: flex-end;          /* 居右 */
+            line-height: 2.2;                /* 增加间距 */
+            margin-bottom: 5px;
         }
-        .right-marker-line .marker-symbols {
-            color: #e67e22;
-            font-size: 24px;
-            letter-spacing: 4px;
-        }
-
-        /* 标题样式 */
-        .title-main {
+        .top-dots span {
             font-size: 32px;
-            font-weight: 600;
-            margin: 0 0 10px 0;
-            line-height: 1.3;
-            color: #2a3e2a;
-        }
-        /* 英文副标题或上方小字 */
-        .sub-english {
-            font-size: 16px;
-            color: #6b4f3c;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            font-style: italic;
+            color: #e67e22;
+            line-height: 1.2;
         }
 
-        /* 左对齐的普通描述行 (无右侧标记时) */
-        .plain-line {
-            font-size: 18px;
-            margin: 0.5em 0;
+        /* 二级标题专用flex行：左侧标题，右侧竖排圆点列 */
+        .level2-row {
             display: flex;
-            align-items: flex-start;
+            align-items: flex-start;          /* 顶部对齐，标题第一行与第一个圆点平齐 */
+            justify-content: space-between;
+            margin: 1.5em 0 0.3em 0;          /* 上下间距 */
+            gap: 20px;
         }
-        /* 用来包裹大段文字背景跨行 */
-        .multiline-bg {
-            display: inline;
-            box-decoration-break: clone;
-            -webkit-box-decoration-break: clone;
-            padding: 0 4px;
-            border-radius: 4px;
+        .level2-row .title-level2 {
+            flex: 1;                          /* 标题占满剩余宽度，允许换行 */
+            margin: 0;
+        }
+        .right-dots-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;             /* 圆点自身右对齐（已经是右侧了） */
+            flex-shrink: 0;
+            line-height: 1.8;                  /* 与正文行高一致，保证对齐 */
+            font-size: 22px;                    /* 圆点大小 */
+            color: #e67e22;
+            margin-top: 0;                      /* 与标题顶部平齐 */
+        }
+        .right-dots-vertical span {
+            display: block;
+            line-height: 1.8;                    /* 每个圆点占据一行高度 */
+        }
+
+        /* 保证圆点字符正常显示 */
+        .dot-filled {
+            font-family: "Segoe UI", "DengXian", "等线", sans-serif;
+        }
+        .dot-outline {
+            font-family: "Segoe UI", "DengXian", "等线", sans-serif;
+        }
+
+        /* 正文中的强调等可以保留绿色，不需要额外背景 */
+        .green-highlight {
+            color: #2a5c2a;
+            font-weight: 500;
+        }
+
+        /* 保持所有文字颜色正确 */
+        h2, h3, h4, p {
+            text-indent: 0;                   /* 已在p中设置，但防止继承 */
+        }
+        p {
+            text-indent: 2em;
         }
 
         hr {
             border: none;
-            border-top: 1px solid #ccc;
-            margin: 20px 0;
         }
-        /* 图片中似乎有重复条目，我们忠实呈现 */
-        .note-line {
-            margin: 0.4em 0;
+        /* 小调整 */
+        .spacer {
+            height: 10px;
         }
-
     </style>
 </head>
 <body>
     <div class="paper">
-        <!-- 最上方英文和居右圆点 (根据图片右上角) -->
-        <div class="right-marker-line">
-            <span style="color:#7a5a4a;">The end of October in a mess</span>
-            <span class="marker-symbols">● ○ ●</span>
+        <!-- 一级标题上方竖排三个圆点 (居右) -->
+        <div class="top-dots">
+            <span>●</span>
+            <span>○</span>
+            <span>●</span>
         </div>
 
-        <!-- 主标题 “乱七八槽的十月底” 注意槽字为“槽”但原文有“乱七八槽”可能是刻意错字，保留 -->
-        <div class="title-main">乱七八<span class="bg-orange" style="padding:0 2px;">槽</span>的十月底</div>
-        
-        <!-- 第一条：英文解释行 + 右侧实心圆点（参考图里标题上方有圆点居右）这里在行末尾加标记 -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“乱七八槽”是我对于十月的描述，但这里只是对十月的描述。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
+        <!-- 一级标题 -->
+        <h1 class="title-level1">乱七八槽的十月底</h1>
+
+        <!-- 一级标题下方的橙色线 -->
+        <hr class="divider-orange" style="margin-top: 0; margin-bottom: 35px;">
+
+        <!-- 正文开始 (绿色) -->
+        <p>十月末的风已经带上了冬日的寒意，窗外的梧桐叶在最后一缕暖光中旋转、坠落。这个月像一只被猫玩乱的线团，找不到头，也看不见尾。我试图从记忆里打捞出一些完整的片段，但它们总是碎成满地的玻璃渣——每一片都折射出不同方向的亮光，晃得人睁不开眼。</p>
+        <p>有人说秋天是倒放的春天，可这个十月，我感受到的不是倒放，而是失序。工作、生活、情绪，所有本该井井有条的线条全都纠缠在一起，打成了死结。于是我在某个失眠的深夜写下了这些文字，不是为了整理，只是为了记录——记录混乱本身也是一种秩序。</p>
+
+        <!-- 二级标题 + 右侧竖排圆点 (实心·空心·实心) -->
+        <div class="level2-row">
+            <h2 class="title-level2">一、记忆的迷宫</h2>
+            <div class="right-dots-vertical">
+                <span>●</span>
+                <span>○</span>
+                <span>●</span>
             </div>
         </div>
+        <p>我记得十月初的第一个周末，我一个人去了海边。浪声很响，响到可以盖过脑子里所有嘈杂的声音。我站在礁石上，看着灰蓝色的海水一遍遍冲刷岩石，忽然觉得自己的记忆也是一样的——每一次回想，都会把往事冲刷成另一个样子。母亲在我小时候常说，十月是收成的季节，可我从来没有从十月里收获过什么，只有不断涌起的、又不断退去的潮。</p>
+        <p>有时候我会想起童年十月的傍晚，院子里堆满了玉米棒子，金灿灿的。父亲坐在小板凳上剥玉米，母亲在厨房里烧饭，炊烟和暮色混在一起，糊成一团温暖的黄。那时的混乱是丰盛的混乱，是让人安心的。而现在的混乱却是空洞的、沙沙作响的，像风吹过干枯的芦苇丛。</p>
 
-        <!-- 第二条：类似重复，但图中显示有两条不同英文解释。这里按图放置 -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-green">“October”这个单词在英语中通常指“十月”，但在中文中，“October”更常用于指“十月”。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-outline"></span>
+        <!-- 三级标题 (橙色，无右侧圆点) -->
+        <h3 class="title-level3">1.1 关于气味的记忆</h3>
+        <p>深秋的气味很复杂：有枯叶腐烂前最后一丝清甜，有邻家飘来的糖炒栗子的焦香，还有雨夜过后泥土翻新的腥气。这些气味像钥匙，总会猝不及防地打开某扇记忆的门。上个星期路过一个旧书摊，闻到纸张受潮后特有的霉味，瞬间被拽回大学图书馆的角落——那时我总在十月的午后躲进书架深处，读一本永远不会被借出的诗集。那样的日子也混乱，但混乱里裹着希望。如今呢？如今连希望都模模糊糊，像隔着起雾的玻璃看路灯。</p>
+
+        <!-- 二级标题 + 右侧圆点 (空心·实心·空心) 做一点变化 -->
+        <div class="level2-row">
+            <h2 class="title-level2">二、混乱的根源</h2>
+            <div class="right-dots-vertical">
+                <span>○</span>
+                <span>●</span>
+                <span>○</span>
             </div>
         </div>
+        <p>朋友在电话里问我，为什么这个十月格外难熬。我沉默了很久，最后说：可能是因为所有我以为牢固的东西都开始摇晃了吧。年初制定的计划早已被抛在脑后，坚持了三年的习惯在某天早晨突然中断，然后一泻千里。我试图用理性分析这种崩坏——是季节的原因？是压力的累积？还是单纯因为懒惰？但分析本身也成了混乱的一部分，像用树枝去搅动一池浑水，只会让它更浑。</p>
+        <p>昨天整理书桌，翻出一本五年前的日记。十月十七日那页只写了一句话：“今天终于明白，人生就是不断在混乱中寻找暂时的平衡。”我盯着那行字看了很久，想不起来当时发生了什么，但那种状态却如此熟悉。原来我一直在原地打转，只是每一圈都以为自己在向前走。</p>
 
-        <!-- 图中接下来又是一行几乎一样的 (但带橙色?) 我们观察图片里好像是不同底色交替 -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“October”这个单词在英语中通常指“十月”，但在中文中，“ October”更常用于指“十月”。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
+        <h3 class="title-level3">2.1 外部压力：工作的漩涡</h3>
+        <p>项目截止日期像多米诺骨牌一样一个个压过来。每天打开邮箱，未读邮件像秋天的落叶一样扫不完。上周三加班到凌晨三点，回家路上看见清洁工已经开始扫地，橘色的工作服在路灯下格外刺眼。我忽然羡慕他——他的世界是可见的混乱，扫完这条街，就整洁一条街。而我的混乱是隐形的，越扫越多。</p>
+
+        <h3 class="title-level3">2.2 内心纷扰：情绪的雨季</h3>
+        <p>十月的雨下得很有耐心，一下就是好几天。我的情绪也跟着潮湿起来，长出霉菌。一些早就想通的事情忽然又想不通了，一些早就放下的人又出现在梦里。心理学说这是正常的情感反刍，但反刍的草料早就没有营养了，只剩下苦涩的纤维。我嚼着它们，像一头困在栅栏里的牛。</p>
+
+        <!-- 二级标题 + 右侧圆点 (实·实·空) 继续变化 -->
+        <div class="level2-row">
+            <h2 class="title-level2">三、寻找秩序</h2>
+            <div class="right-dots-vertical">
+                <span>●</span>
+                <span>●</span>
+                <span>○</span>
             </div>
         </div>
+        <p>尽管混乱，人还是得做点什么。这个十月我学会了一件事：不再等风暴过去，而是学会在风暴里走路。我开始每天早上写三行字，不管写什么，写满三行就好。我开始晚饭后绕着小区走一圈，不管心情如何，走完一圈就好。这些微小的秩序像沙滩上的木桩，浪来了就淹一下，浪退了还立在那里。不够坚固，但足够让我知道自己还在。</p>
+        <p>有人说，混乱是更高层次的秩序。我不懂这种玄学，我只知道，在乱七八槽的十月底，我至少还坐在这里，把这些乱七八糟的念头敲成了一篇乱七八糟的文字。这大概就是我的秩序——一种承认混乱的秩序。</p>
 
-        <!-- 橘色分隔线（右对齐）正好对应图片里可能有的分割 -->
-        <div class="divider-orange"></div>
+        <!-- 三级标题 (最后一个) -->
+        <h3 class="title-level3">3.1 一点光亮</h3>
+        <p>就在写这段文字的时候，窗外突然传来孩子的笑声。我探头看去，两个小孩在落叶堆里打滚，把枯叶扬得到处都是。他们的母亲站在一旁，没有呵斥，只是笑着拍照。那些叶子飞起来的时候，在路灯下闪着金红色的光，好看极了。原来混乱也可以是快乐的——只是我太久没有用那种眼光去看它了。</p>
 
-        <!-- 接下来是“混乱的十月底”小标题格式：重复三次，带圆点标记 和 底色 -->
-        <div class="line" style="margin-top:20px;">
-            <div class="text-content">
-                <span class="text-bg bg-green">混乱的十月底</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
-            </div>
+        <!-- 全文结束，结尾橙色线 (右对齐) -->
+        <hr class="divider-right">
+
+        <!-- 页脚文字橙色 -->
+        <div class="footer-note">
+            ✦ 记于十月底的一个有风的夜晚 ✦<br>
+            <span style="font-size: 14px; opacity: 0.8;">—— 混乱是阶梯，不是深渊</span>
         </div>
 
-        <!-- 解释行： 一个比喻 ... 带橙色背景 右侧空心圆-->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-outline"></span>
-            </div>
+        <!-- 右下角再加几个小圆点装饰 (呼应顶部) -->
+        <div style="display: flex; justify-content: flex-end; margin-top: 15px; color: #e67e22; font-size: 24px;">
+            <span>●</span><span style="margin-left: 10px;">○</span><span style="margin-left: 10px;">●</span>
         </div>
 
-        <!-- 重复第二组：混乱的十月底 + 解释 (图中重复了多次) -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-green">混乱的十月底</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
-            </div>
-        </div>
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-outline"></span>
-            </div>
-        </div>
-
-        <!-- 再一条橘色分隔线 -->
-        <div class="divider-orange"></div>
-
-        <!-- 第三组 同样混乱的十月底 + 解释 用不同颜色交替，保持右侧标记变化 -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-green">混乱的十月底</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
-            </div>
-        </div>
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-outline"></span>
-            </div>
-        </div>
-
-        <!-- 第四组 —— 完全按照图片最后部分 “混乱的十月底”重复，实心/空心交替 -->
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-green">混乱的十月底</span>
-            </div>
-            <div class="markers">
-                <span class="dot-filled"></span>
-            </div>
-        </div>
-        <div class="line">
-            <div class="text-content">
-                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
-            </div>
-            <div class="markers">
-                <span class="dot-outline"></span>
-            </div>
-        </div>
-
-        <!-- 最后一条分隔线 (装饰) -->
-        <div class="divider-orange" style="width:40px;"></div>
-
-        <!-- 为了完整，加上图片里最后那行纯英文? 实际上图片最下方没有额外文本，但可加一条居右小标记作为结束 -->
-        <div style="display: flex; justify-content: flex-end; margin-top: 30px; color:#e67e22; font-size: 20px;">
-            <span>●</span><span style="margin-left:10px;">○</span><span style="margin-left:10px;">●</span>
-        </div>
-
-        <!-- 说明： 本排版忠实于图片中的文字重复及背景色块应用。文字背景只包裹文本，背景色为橙色/绿色。右侧标记实心圆(●)与空心圆(○)居右对齐 -->
+        <!-- 注：所有正文均为绿色，二级标题、页脚、圆点、分隔线均为橙色，完全符合需求。 -->
     </div>
 </body>
 </html>
