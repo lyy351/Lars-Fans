@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乱七八槽的十月底 · 文字排版样式</title>
+    <style>
+        /* 等线字体优先，回退方案 */
+        body {
+            font-family: "DengXian", "等线", "Microsoft YaHei", sans-serif;
+            background-color: #1e1e1e;   /* 深色图片背景，突出文字背景 */
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 主卡片 – 模拟纸张，让文字背景块更明显 */
+        .paper {
+            max-width: 780px;
+            width: 100%;
+            background-color: #f6f4f0;  /* 暖白底，像旧笔记纸 */
+            padding: 50px 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+
+        /* 所有文字行基本样式 */
+        .line {
+            font-size: 18px;
+            line-height: 1.8;
+            margin: 0.6em 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;                 /* 与右侧标记的间距 */
+        }
+
+        /* 左侧文字内容区域：可包裹背景色 */
+        .text-content {
+            flex: 1;                    /* 撑满剩余宽度 */
+            padding: 0 4px;              /* 让背景色块与文字有一点呼吸 */
+            border-radius: 4px;          /* 文字背景轻微圆角 (与图中相似) */
+            display: inline;             /* 保持内联，背景只包文字 */
+        }
+
+        /* 让背景只包裹文字（而非整行）—— 通过span实现 */
+        .text-bg {
+            display: inline;             /* 关键：背景紧紧包裹文本 */
+            padding: 0 4px;              /* 左右稍留空隙，上下不额外增加行高 */
+            border-radius: 4px;
+            line-height: inherit;
+            box-decoration-break: clone; /* 跨行时每行独立背景块 (更好看) */
+            -webkit-box-decoration-break: clone;
+        }
+
+        /* 橙色文字背景 */
+        .bg-orange {
+            background-color: #f9b83c;   /* 暖橙色，类似图中荧光笔 */
+            color: #1e1e1e;               /* 深色字保证对比 */
+        }
+        /* 绿色文字背景 */
+        .bg-green {
+            background-color: #9fcb8b;   /* 柔和豆绿 */
+            color: #1e1e1e;
+        }
+        /* 普通文字无背景，但也可以带一点浅色 */
+        .text-plain {
+            background-color: transparent;
+        }
+
+        /* ----- 右侧标记列 (橘色圆点、空心圆) ----- */
+        .markers {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;        /* 居右对齐 */
+            justify-content: flex-start;
+            min-width: 34px;               /* 留出空间放圆点 */
+            font-size: 22px;               /* 圆点大小 */
+            line-height: 1.8;               /* 与文字行高一致 */
+            color: #e67e22;                 /* 橘色 */
+            letter-spacing: 2px;
+            padding-top: 0.1em;              /* 微调对齐 */
+        }
+
+        /* 实心圆 */
+        .dot-filled {
+            color: #e67e22;
+            opacity: 0.9;
+        }
+        /* 空心圆 (用unicode) */
+        .dot-outline {
+            color: #e67e22;
+            opacity: 0.85;
+        }
+        /* 也可用字符，图中是圆形标记，这里用 • (U+2022) 和 ◦ (U+25E6) 或者 ○ */
+        .dot-outline::before {
+            content: "○";                /* 空心圆 */
+            font-size: 1.2em;
+            display: inline-block;
+            transform: scale(1.1);
+        }
+        .dot-filled::before {
+            content: "●";                /* 实心圆 */
+            font-size: 1.2em;
+        }
+        /* 为了灵活控制显示，也可以用span直接放字符，但不影响居右 */
+        .markers span {
+            display: block;
+            line-height: 1.2;
+            margin: 0.1em 0;
+        }
+
+        /* 分隔线 (橘色短横线) */
+        .divider-orange {
+            border: 0;
+            border-top: 2px solid #e67e22;
+            width: 60px;
+            margin: 24px 0 24px auto;     /* 右对齐 (跟右侧标记对齐) */
+            opacity: 0.7;
+        }
+
+        /* 标题上方的居右对齐行 (包含圆点与文字) */
+        .right-marker-line {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0px;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .right-marker-line .marker-symbols {
+            color: #e67e22;
+            font-size: 24px;
+            letter-spacing: 4px;
+        }
+
+        /* 标题样式 */
+        .title-main {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+            color: #2a3e2a;
+        }
+        /* 英文副标题或上方小字 */
+        .sub-english {
+            font-size: 16px;
+            color: #6b4f3c;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* 左对齐的普通描述行 (无右侧标记时) */
+        .plain-line {
+            font-size: 18px;
+            margin: 0.5em 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        /* 用来包裹大段文字背景跨行 */
+        .multiline-bg {
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        /* 图片中似乎有重复条目，我们忠实呈现 */
+        .note-line {
+            margin: 0.4em 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="paper">
+        <!-- 最上方英文和居右圆点 (根据图片右上角) -->
+        <div class="right-marker-line">
+            <span style="color:#7a5a4a;">The end of October in a mess</span>
+            <span class="marker-symbols">● ○ ●</span>
+        </div>
+
+        <!-- 主标题 “乱七八槽的十月底” 注意槽字为“槽”但原文有“乱七八槽”可能是刻意错字，保留 -->
+        <div class="title-main">乱七八<span class="bg-orange" style="padding:0 2px;">槽</span>的十月底</div>
+        
+        <!-- 第一条：英文解释行 + 右侧实心圆点（参考图里标题上方有圆点居右）这里在行末尾加标记 -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“乱七八槽”是我对于十月的描述，但这里只是对十月的描述。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+
+        <!-- 第二条：类似重复，但图中显示有两条不同英文解释。这里按图放置 -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-green">“October”这个单词在英语中通常指“十月”，但在中文中，“October”更常用于指“十月”。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-outline"></span>
+            </div>
+        </div>
+
+        <!-- 图中接下来又是一行几乎一样的 (但带橙色?) 我们观察图片里好像是不同底色交替 -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“October”这个单词在英语中通常指“十月”，但在中文中，“ October”更常用于指“十月”。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+
+        <!-- 橘色分隔线（右对齐）正好对应图片里可能有的分割 -->
+        <div class="divider-orange"></div>
+
+        <!-- 接下来是“混乱的十月底”小标题格式：重复三次，带圆点标记 和 底色 -->
+        <div class="line" style="margin-top:20px;">
+            <div class="text-content">
+                <span class="text-bg bg-green">混乱的十月底</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+
+        <!-- 解释行： 一个比喻 ... 带橙色背景 右侧空心圆-->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-outline"></span>
+            </div>
+        </div>
+
+        <!-- 重复第二组：混乱的十月底 + 解释 (图中重复了多次) -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-green">混乱的十月底</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-outline"></span>
+            </div>
+        </div>
+
+        <!-- 再一条橘色分隔线 -->
+        <div class="divider-orange"></div>
+
+        <!-- 第三组 同样混乱的十月底 + 解释 用不同颜色交替，保持右侧标记变化 -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-green">混乱的十月底</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-outline"></span>
+            </div>
+        </div>
+
+        <!-- 第四组 —— 完全按照图片最后部分 “混乱的十月底”重复，实心/空心交替 -->
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-green">混乱的十月底</span>
+            </div>
+            <div class="markers">
+                <span class="dot-filled"></span>
+            </div>
+        </div>
+        <div class="line">
+            <div class="text-content">
+                <span class="text-bg bg-orange">“混乱的十月底”是一个比喻，用来形容一个混乱、无序的环境。</span>
+            </div>
+            <div class="markers">
+                <span class="dot-outline"></span>
+            </div>
+        </div>
+
+        <!-- 最后一条分隔线 (装饰) -->
+        <div class="divider-orange" style="width:40px;"></div>
+
+        <!-- 为了完整，加上图片里最后那行纯英文? 实际上图片最下方没有额外文本，但可加一条居右小标记作为结束 -->
+        <div style="display: flex; justify-content: flex-end; margin-top: 30px; color:#e67e22; font-size: 20px;">
+            <span>●</span><span style="margin-left:10px;">○</span><span style="margin-left:10px;">●</span>
+        </div>
+
+        <!-- 说明： 本排版忠实于图片中的文字重复及背景色块应用。文字背景只包裹文本，背景色为橙色/绿色。右侧标记实心圆(●)与空心圆(○)居右对齐 -->
+    </div>
+</body>
+</html>
