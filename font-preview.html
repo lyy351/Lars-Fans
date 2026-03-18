@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AO3 常用字体预览 · 工作皮肤适用</title>
+    <style>
+        body {
+            background-color: #f5f1e8;
+            font-family: sans-serif;
+            margin: 30px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #8c2e2e;
+            border-bottom: 2px solid #8c2e2e;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #4a4a4a;
+            border-left: 5px solid #d4c9b8;
+            padding-left: 15px;
+        }
+        .font-sample {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #faf8f2;
+            border: 1px solid #e0d6c2;
+            border-radius: 5px;
+        }
+        .font-sample p {
+            margin: 8px 0;
+            font-size: 18px;
+        }
+        .font-name {
+            font-weight: bold;
+            color: #8c2e2e;
+            font-size: 1.1rem;
+        }
+        .css-code {
+            background: #ede7db;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2d2d2d;
+            margin-top: 5px;
+        }
+        .note {
+            background: #fff3d6;
+            padding: 10px 15px;
+            border-left: 4px solid #8c2e2e;
+            margin: 20px 0;
+        }
+        hr {
+            border: 1px dashed #d4c9b8;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📰 AO3 工作皮肤 · 常用字体预览</h1>
+    <div class="note">
+        <strong>⚠️ 重要说明：</strong> AO3 工作皮肤（Work Skin）<strong>不能加载外部字体文件</strong>（如 Google Fonts 或 .ttf 链接），只能使用读者设备上已安装的字体。以下列出的字体均为 Windows / macOS / Linux 等系统的常见字体，实际显示效果取决于读者的本地安装。建议在 CSS 中提供多个后备字体（fallback）。
+    </div>
+
+    <h2>🔤 衬线字体（Serif）—— 适合正文、复古风格</h2>
+    <div class="font-sample">
+        <div class="font-name">Times New Roman</div>
+        <p style="font-family: 'Times New Roman', serif;">这是一段示例文字。The quick brown fox jumps over the lazy dog. 中文宋体效果取决于后备字体。</p>
+        <div class="css-code">font-family: 'Times New Roman', serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Georgia</div>
+        <p style="font-family: Georgia, serif;">Georgia 是专为屏幕设计的衬线体，阅读舒适。示例：ABC abc 123 中文显示依赖后备。</p>
+        <div class="css-code">font-family: Georgia, serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Garamond</div>
+        <p style="font-family: Garamond, serif;">Garamond 是经典书籍字体，风格古典。示例：The quick brown fox...</p>
+        <div class="css-code">font-family: Garamond, serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">宋体 (SimSun) / 华文宋体 (Songti SC)</div>
+        <p style="font-family: 'SimSun', 'Songti SC', serif;">这是最常见的中文衬线体。Windows 用户看到 SimSun，macOS 用户看到 Songti SC。</p>
+        <div class="css-code">font-family: "SimSun", "Songti SC", serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">思源宋体 (Source Han Serif / Noto Serif SC)</div>
+        <p style="font-family: 'Source Han Serif', 'Noto Serif SC', serif;">思源宋体是开源字体，macOS 可能内置，Windows 需安装。示例：思源宋体显示效果。</p>
+        <div class="css-code">font-family: "Source Han Serif", "Noto Serif SC", serif;</div>
+    </div>
+
+    <h2>🔡 无衬线字体（Sans-serif）—— 现代、清晰</h2>
+    <div class="font-sample">
+        <div class="font-name">Arial</div>
+        <p style="font-family: Arial, sans-serif;">Arial 是通用无衬线体。示例：ABCDEFG 中文后备字体。</p>
+        <div class="css-code">font-family: Arial, sans-serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Helvetica</div>
+        <p style="font-family: Helvetica, sans-serif;">Helvetica 是经典设计，macOS 默认。示例：Helvetica 显示效果。</p>
+        <div class="css-code">font-family: Helvetica, sans-serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Verdana</div>
+        <p style="font-family: Verdana, sans-serif;">Verdana 字符宽大，屏幕阅读极佳。示例：Verdana 字体示例。</p>
+        <div class="css-code">font-family: Verdana, sans-serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">微软雅黑 (Microsoft YaHei)</div>
+        <p style="font-family: 'Microsoft YaHei', sans-serif;">Windows 默认中文字体，无衬线。示例：微软雅黑显示效果。</p>
+        <div class="css-code">font-family: "Microsoft YaHei", sans-serif;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">苹方 (PingFang SC)</div>
+        <p style="font-family: 'PingFang SC', sans-serif;">macOS / iOS 默认中文字体，无衬线。示例：苹方字体显示。</p>
+        <div class="css-code">font-family: "PingFang SC", sans-serif;</div>
+    </div>
+
+    <h2>📝 等宽字体（Monospace）—— 代码、打字机效果</h2>
+    <div class="font-sample">
+        <div class="font-name">Courier New</div>
+        <p style="font-family: 'Courier New', monospace;">Courier New 是传统等宽字体。示例：int main() { return 0; } 中文后备。</p>
+        <div class="css-code">font-family: 'Courier New', monospace;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Source Code Pro</div>
+        <p style="font-family: 'Source Code Pro', monospace;">Source Code Pro 是开源编程字体。示例：console.log("hello");</p>
+        <div class="css-code">font-family: 'Source Code Pro', monospace;</div>
+    </div>
+
+    <h2>✍️ 手写/装饰字体（Cursive/Fantasy）—— 慎用，依赖本地</h2>
+    <div class="font-sample">
+        <div class="font-name">Comic Sans MS</div>
+        <p style="font-family: 'Comic Sans MS', cursive;">Comic Sans MS 是手写风格。示例：Handwriting style.</p>
+        <div class="css-code">font-family: 'Comic Sans MS', cursive;</div>
+    </div>
+    <div class="font-sample">
+        <div class="font-name">Brush Script MT</div>
+        <p style="font-family: 'Brush Script MT', cursive;">Brush Script 是连笔手写体。示例：Brush Script.</p>
+        <div class="css-code">font-family: 'Brush Script MT', cursive;</div>
+    </div>
+
+    <hr>
+    <div class="note">
+        <strong>💡 使用建议：</strong><br>
+        - 在 AO3 工作皮肤中，将上述 `font-family` 直接应用于 `.userstuff` 或特定元素。<br>
+        - 为了更好的兼容性，建议提供多个后备字体（例如：`"SimSun", "Songti SC", "Times New Roman", serif`）。<br>
+        - 避免使用中文引号（如 “宋体”），应使用英文引号包裹英文字体名（如 `"SimSun"`），防止 AO3 过滤器拦截。<br>
+        - 本页预览效果完全依赖你本地安装的字体，与实际在 AO3 上读者所见一致。
+    </div>
+    <p style="text-align: center; color: #666; margin-top: 30px;">—— 你可以将此文件保存到本地，用浏览器打开预览 ——</p>
+</div>
+</body>
+</html>
