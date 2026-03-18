@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>清新·忧郁 · 北极燕鸥与嘉兰百合</title>
+    <title>忧郁·粉蓝紫白 · 北极燕鸥与嘉兰百合</title>
     <style>
-        /* 全局：粉蓝紫白清新色调，无渐变，无暗沉 */
+        /* 全局：柔和低饱和粉蓝紫白，无渐变，文字稍大 */
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #c9dae8;  /* 极浅蓝灰背景，衬托纸张 */
+            background: #b6b3c0;  /* 暖灰背景，衬托纸张 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,87 +22,86 @@
             padding: 30px 15px;
         }
 
-        /* 纸张：轻透的蓝白底，带细碎清新纹理 */
+        /* 纸张：浅灰紫底 + 细微杂点 */
         .paper {
-            max-width: 700px;
+            max-width: 720px;
             width: 100%;
-            background-color: #f9faff;        /* 极淡蓝白 */
+            background-color: #f0ecf2;        /* 极浅灰紫 */
             background-image: 
-                radial-gradient(circle at 15% 25%, rgba(200, 220, 255, 0.5) 2px, transparent 2px),
-                radial-gradient(circle at 85% 70%, rgba(230, 200, 250, 0.4) 3px, transparent 3px),
-                radial-gradient(circle at 45% 50%, rgba(250, 200, 230, 0.3) 1px, transparent 1px),
-                linear-gradient(135deg, rgba(255, 240, 245, 0.4) 1px, transparent 1px);
-            background-size: 100px 100px, 120px 120px, 80px 80px, 30px 30px;
-            box-shadow: 0 20px 40px rgba(150, 170, 200, 0.25), 0 8px 16px rgba(100, 120, 150, 0.15), inset 0 0 0 1px #ffffffcc, inset 0 0 40px #ffffff80;
+                radial-gradient(circle at 15% 25%, rgba(170, 150, 180, 0.15) 2px, transparent 2px),
+                radial-gradient(circle at 85% 70%, rgba(140, 160, 180, 0.12) 3px, transparent 3px),
+                radial-gradient(circle at 45% 50%, rgba(190, 150, 170, 0.1) 1px, transparent 1px),
+                linear-gradient(135deg, rgba(200, 180, 190, 0.1) 1px, transparent 1px);
+            background-size: 100px 100px, 120px 120px, 80px 80px, 40px 40px;
+            box-shadow: 0 20px 40px rgba(80, 70, 90, 0.2), 0 8px 16px rgba(60, 50, 70, 0.15), inset 0 0 0 1px #e4dae8, inset 0 0 40px #e8e0f0;
             border-radius: 4px;
-            padding: 60px 60px 65px 60px;
+            padding: 65px 65px 70px 65px;
             position: relative;
-            line-height: 1.8;
-            color: #3f4468;                    /* 深灰蓝紫，清晰柔和 */
-            font-size: 17px;
+            line-height: 1.9;
+            color: #4f4a63;                    /* 深灰紫 */
+            font-size: 18px;                    /* 正文字体大一号 */
             letter-spacing: 0.02em;
-            backdrop-filter: blur(2px);         /* 极轻微玻璃感，增加清新 */
         }
 
-        /* 左上角数字：粉红色 */
+        /* 左上角数字：柔粉 */
         .page-number {
             position: absolute;
             top: 30px;
             left: 40px;
-            font-size: 22px;
+            font-size: 23px;
             font-weight: 400;
-            color: #f6a6b7;                     /* 粉红 */
+            color: #c9a5b5;                     /* 柔粉 */
             font-family: 'Avenir', 'Helvetica Neue', sans-serif;
             opacity: 0.9;
-            text-shadow: 2px 2px 6px #ffe0f0;
+            text-shadow: 1px 1px 0 #f0e0ec;
         }
 
-        /* 标题上方装饰线：淡蓝色 */
+        /* 标题上方装饰线：柔蓝 */
         .title-decoration {
             margin-top: 25px;
-            border-top: 2px solid #a9d0f0;       /* 淡蓝 */
+            border-top: 2px solid #b0c2d1;       /* 柔蓝 */
             width: 80px;
-            margin-bottom: 20px;
-            opacity: 0.8;
+            margin-bottom: 22px;
+            opacity: 0.7;
         }
 
-        /* 主标题：蓝紫色，清新 */
+        /* 主标题：柔紫 */
         .main-title {
-            font-size: 30px;
+            font-size: 32px;
             font-weight: 550;
-            color: #6c7ab0;                       /* 粉蓝紫混合 */
-            margin-bottom: 30px;
+            color: #8877a8;                       /* 柔紫 */
+            margin-bottom: 32px;
             line-height: 1.3;
             letter-spacing: 0.5px;
-            text-shadow: 1px 1px 0 #ffffff;
+            text-shadow: 1px 1px 0 #f0e4f0;
         }
 
-        /* 正文段落：深灰紫，保持忧郁但清晰 */
+        /* 正文段落：深灰紫，更忧郁 */
         .content p {
             text-indent: 2em;
             margin: 1em 0;
             word-break: break-word;
             text-align: justify;
-            color: #4c4f7a;                         /* 深灰紫 */
+            color: #59516b;                         /* 深灰紫 */
         }
 
-        /* 首字下沉：淡紫色 */
+        /* 首字下沉：柔粉 */
         .content p:first-of-type::first-letter {
-            font-size: 2.6em;
+            font-size: 2.7em;
             float: left;
             line-height: 0.8;
             margin-right: 8px;
-            color: #b09cd9;                           /* 淡紫 */
+            color: #cbadc0;                           /* 柔粉 */
             font-weight: 500;
-            text-shadow: 1px 1px 4px #ede0ff;
+            text-shadow: 1px 1px 3px #ecd8e8;
         }
 
-        /* 省略号：淡蓝色 */
+        /* 省略号：柔蓝 */
         .ellipsis {
             text-align: right;
-            font-size: 32px;
-            color: #8cb3d9;                             /* 淡蓝 */
-            margin-top: 25px;
+            font-size: 34px;
+            color: #9fb4cc;                             /* 柔蓝 */
+            margin-top: 28px;
             letter-spacing: 6px;
             opacity: 0.7;
             font-family: 'Avenir', sans-serif;
@@ -110,63 +109,63 @@
 
         /* 页脚：粉、蓝、紫、白四色分配 */
         .footer {
-            margin-top: 50px;
+            margin-top: 55px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 15px;
-            border-top: 1px dashed #c3d0f0;             /* 淡蓝虚线 */
-            padding-top: 18px;
+            font-size: 16px;
+            border-top: 1px dashed #c6b8d1;             /* 柔紫虚线 */
+            padding-top: 20px;
             font-style: italic;
         }
         .footer .left-symbols {
             font-style: normal;
             letter-spacing: 4px;
-            color: #f5a7b9;                               /* 粉 */
-            font-size: 20px;
+            color: #cfb2c2;                               /* 柔粉 */
+            font-size: 22px;
         }
         .footer .center-text {
-            color: #7192b0;                                /* 蓝 */
+            color: #92a9bf;                                /* 柔蓝 */
             font-style: normal;
         }
         .footer .right-symbols {
-            font-size: 22px;
-            color: #b89ad0;                                 /* 紫 */
+            font-size: 24px;
+            color: #b59ecb;                                 /* 柔紫 */
             letter-spacing: 5px;
         }
         .footer .extra-white {
-            color: #ffffff;                                 /* 白 */
-            text-shadow: 0 0 8px #b0d0ff;
-            font-size: 22px;
+            color: #f2eaf5;                                 /* 暖白 */
+            text-shadow: 0 0 8px #c0b0d0;
+            font-size: 24px;
         }
 
-        /* 忧郁的小点缀：浮动点 */
+        /* 忧郁的小点缀：浮动点 (柔白) */
         .float-dot {
             position: absolute;
             bottom: 25px;
-            right: 50px;
-            font-size: 16px;
-            color: #bacef0;
+            right: 55px;
+            font-size: 18px;
+            color: #cbbdd6;
             opacity: 0.5;
         }
 
         /* 移动端优化 */
         @media (max-width: 550px) {
-            .paper { padding: 40px 25px; }
-            .main-title { font-size: 26px; }
+            .paper { padding: 45px 30px; }
+            .main-title { font-size: 28px; }
             .page-number { top: 20px; left: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="paper">
-        <!-- 左上角数字（粉） -->
+        <!-- 左上角数字（柔粉） -->
         <div class="page-number">754</div>
 
-        <!-- 标题上方装饰线（蓝） -->
+        <!-- 标题上方装饰线（柔蓝） -->
         <div class="title-decoration"></div>
 
-        <!-- 主标题（蓝紫） -->
+        <!-- 主标题（柔紫） -->
         <h1 class="main-title">02 北极燕鸥与嘉兰百合</h1>
 
         <!-- 正文内容 -->
@@ -178,21 +177,21 @@
             <p>在化作飞鸟的头几个月里，她总算可以在一个相对稳定的环境来思考自己前面的遭遇，但她</p>
         </div>
 
-        <!-- 省略号（淡蓝） -->
+        <!-- 省略号（柔蓝） -->
         <div class="ellipsis">······</div>
 
         <!-- 页脚：粉、蓝、紫、白 -->
         <div class="footer">
-            <span class="left-symbols">✧ ✦ ✧</span>          <!-- 粉 -->
-            <span class="center-text">北极燕鸥 · 嘉兰百合</span>  <!-- 蓝 -->
-            <span class="right-symbols">✧ ✧ ✧</span>          <!-- 紫 -->
-            <span class="extra-white">✧</span>                 <!-- 白 -->
+            <span class="left-symbols">✧ ✦ ✧</span>          <!-- 柔粉 -->
+            <span class="center-text">北极燕鸥 · 嘉兰百合</span>  <!-- 柔蓝 -->
+            <span class="right-symbols">✧ ✧ ✧</span>          <!-- 柔紫 -->
+            <span class="extra-white">✧</span>                 <!-- 暖白 -->
         </div>
 
         <!-- 极淡的装饰小点，增加空气感 -->
         <div class="float-dot">·  ·  ·</div>
     </div>
 
-    <!-- 说明：整体色调粉、蓝、紫、白，风格清新忧郁，无暗沉，无渐变（纯色），背景轻盈。 -->
+    <!-- 说明：正文字体18px，色系柔和忧郁（低饱和粉蓝紫白），无渐变，适合AO3 -->
 </body>
 </html>
