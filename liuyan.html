@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黄子弘凡 · 留言板 · 信纸瀑布流</title>
+    <title>复古信纸 · 留言板</title>
     <style>
-        /* 全局重置与字体 */
         * {
             margin: 0;
             padding: 0;
@@ -13,13 +12,12 @@
         }
 
         body {
-            background: #f5efe6;  /* 暖白旧纸背景 */
+            background: #e1d5c0;  /* 深一点的旧纸色，衬托信纸 */
             font-family: 'Segoe UI', '华文楷体', cursive, sans-serif;
             padding: 30px 20px;
             min-height: 100vh;
         }
 
-        /* 主容器 */
         .guestbook-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -28,20 +26,20 @@
         h1 {
             font-family: 'Press Start 2P', cursive;
             font-size: 28px;
-            color: #2C1810;
+            color: #3e2e1f;
             margin-bottom: 30px;
             text-align: center;
-            background: linear-gradient(135deg, #FFD93D, #FF8A5C);
+            background: linear-gradient(135deg, #c7a87b, #a57c5a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             padding-bottom: 10px;
-            border-bottom: 2px dashed #FF8A5C;
+            border-bottom: 2px dashed #b58b6b;
             letter-spacing: 2px;
         }
 
-        /* 瀑布流网格 — 使用多列布局实现类似Pinterest的效果 */
+        /* 瀑布流网格 */
         .masonry {
-            column-count: 3;          /* 默认三列 */
+            column-count: 3;
             column-gap: 20px;
         }
 
@@ -56,90 +54,87 @@
             }
         }
 
-        /* 留言卡片 */
+        /* 复古信纸卡片 */
         .message-card {
-            break-inside: avoid;        /* 防止卡片被截断到两列 */
+            break-inside: avoid;
             margin-bottom: 20px;
-            background: #fff9f0;         /* 信纸底色（备选） */
-            /* 信纸纹理：先用纯CSS绘制横线，后期可替换为图片 */
+            /* 基础纸张色 */
+            background-color: #faf0e6;
+            /* 清晰的直线横线：1px 实线，间距24px */
             background-image: 
                 repeating-linear-gradient(
                     to bottom,
-                    #e8d8c0 0px,
-                    #e8d8c0 1px,
+                    #d9c8b2 0px,
+                    #d9c8b2 1px,
                     transparent 1px,
                     transparent 24px
                 );
-            background-size: 100% 24px;  /* 横线间距24px */
-            background-position: 0 20px;  /* 从顶部20px开始画线，留出留白 */
-            background-repeat: no-repeat;  /* 不重复，由repeating-linear-gradient负责 */
-            /* 如果有真实的纸纹图片，可以用以下方式叠加：
-            background-image: 
-                repeating-linear-gradient(to bottom, #e8d8c0 0px, #e8d8c0 1px, transparent 1px, transparent 24px),
-                url('../images/paper-texture.png');
-            background-blend-mode: multiply;
-            */
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05);
+            background-size: 100% 24px;
+            background-position: 0 20px;   /* 从距离顶部20px处开始画线，留出天头 */
+            background-repeat: no-repeat;    /* 防止重复，由 repeating-linear-gradient 控制 */
+            /* 边缘轻微泛黄和阴影，增加复古感 */
+            box-shadow: 0 4px 12px rgba(90, 60, 30, 0.15),
+                        0 1px 2px rgba(0,0,0,0.05),
+                        inset 0 0 0 1px rgba(255, 245, 220, 0.8);
+            border-radius: 4px 12px 12px 4px;  /* 左侧稍微平直，模仿便签本 */
             padding: 20px 20px 25px 20px;
-            position: relative;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
-            border: 1px solid rgba(255, 216, 138, 0.4);
+            border-left: 4px solid #b58b6b;   /* 左侧加一条深色装饰边，像老式信纸 */
         }
 
         .message-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(255, 138, 92, 0.25);
+            box-shadow: 0 12px 24px rgba(140, 90, 40, 0.3);
         }
 
-        /* 留言内容区域 — 固定高度，内部滚动 */
+        /* 留言内容区域（固定高度，内部滚动） */
         .message-content {
-            max-height: 180px;           /* 固定高度，超出可滚动 */
+            max-height: 180px;
             overflow-y: auto;
             padding-right: 10px;
             margin-top: 15px;
             font-size: 14px;
-            line-height: 1.8;
-            color: #2C1810;
+            line-height: 24px;      /* 与横线间距一致，让文字正好写在横线上 */
+            color: #3e2e1f;
             position: relative;
             z-index: 2;
-            /* 确保文字在横线之上 */
+            /* 让滚动条窄一点，更精致 */
+            scrollbar-width: thin;
+            scrollbar-color: #b58b6b #f0e0d0;
         }
 
-        .message-content p {
-            margin-bottom: 1em;
-        }
-
-        /* 自定义滚动条（微调） */
         .message-content::-webkit-scrollbar {
             width: 6px;
         }
         .message-content::-webkit-scrollbar-thumb {
-            background: #FF8A5C;
+            background: #b58b6b;
+            border-radius: 10px;
+        }
+        .message-content::-webkit-scrollbar-track {
+            background: #f0e0d0;
             border-radius: 10px;
         }
 
-        /* 留言者信息 */
         .message-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 15px;
             padding-top: 10px;
-            border-top: 1px dashed #FF8A5C;
+            border-top: 1px dashed #b58b6b;
             font-size: 12px;
-            color: #666;
+            color: #5e4a38;
         }
 
         .author {
             font-weight: bold;
-            color: #FF6B6B;
+            color: #a55d3d;
         }
 
         .date {
             font-style: italic;
-            color: #8B6B4D;
+            color: #7b6350;
         }
 
         /* 双击放大模态框 */
@@ -149,7 +144,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(60, 40, 20, 0.7);
             display: none;
             align-items: center;
             justify-content: center;
@@ -161,31 +156,32 @@
             width: 90%;
             max-width: 600px;
             max-height: 80vh;
-            background: #fff9f0;
-            /* 同样应用信纸背景 */
+            background-color: #faf0e6;
             background-image: 
                 repeating-linear-gradient(
                     to bottom,
-                    #e8d8c0 0px,
-                    #e8d8c0 1px,
+                    #d9c8b2 0px,
+                    #d9c8b2 1px,
                     transparent 1px,
                     transparent 24px
                 );
             background-size: 100% 24px;
             background-position: 0 20px;
             background-repeat: no-repeat;
-            border-radius: 24px;
+            border-radius: 8px 24px 24px 8px;
             padding: 30px 30px 30px 30px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             position: relative;
             overflow-y: auto;
-            border: 2px solid #FFD93D;
+            border: 2px solid #b58b6b;
+            border-left-width: 8px;
         }
 
         .modal-card .message-content {
-            max-height: none;           /* 放大后取消高度限制 */
+            max-height: none;
             overflow-y: visible;
             font-size: 16px;
+            line-height: 24px;
             padding-right: 0;
         }
 
@@ -195,8 +191,8 @@
             right: 20px;
             font-size: 30px;
             cursor: pointer;
-            color: #2C1810;
-            background: rgba(255,255,255,0.5);
+            color: #3e2e1f;
+            background: rgba(255, 240, 220, 0.8);
             width: 40px;
             height: 40px;
             display: flex;
@@ -204,18 +200,17 @@
             justify-content: center;
             border-radius: 50%;
             transition: 0.2s;
-            z-index: 10;
+            border: 1px solid #b58b6b;
         }
 
         .modal-close:hover {
-            background: #FF8A5C;
+            background: #b58b6b;
             color: white;
         }
 
-        /* 示例占位说明 */
         .placeholder-note {
             text-align: center;
-            color: #999;
+            color: #8b7a6a;
             font-style: italic;
             margin-top: 40px;
         }
@@ -223,19 +218,14 @@
 </head>
 <body>
     <div class="guestbook-container">
-        <h1>📬 留言板 · 信纸漂流</h1>
+        <h1>📬 留言板 · 复古信纸</h1>
 
-        <!-- 瀑布流容器 -->
-        <div class="masonry" id="masonryGrid">
-            <!-- 留言卡片由 JS 动态生成，但先放置静态示例以便直接预览 -->
-        </div>
-
+        <div class="masonry" id="masonryGrid"></div>
         <div class="placeholder-note" id="placeholder">
             ⭐ 双击任意留言卡片可放大查看 ⭐
         </div>
     </div>
 
-    <!-- 双击放大的模态框 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-card" id="modalCard">
             <span class="modal-close" id="modalClose">&times;</span>
@@ -249,9 +239,8 @@
 
     <script>
         (function() {
-            // 示例留言数据（实际可从服务器加载）
             const messages = [
-                { author: '一个爱黄子的粉丝', date: '2026.03.15', content: '今天听了《元与均棋》现场，太震撼了！他的声音真的能穿透灵魂。希望以后能有更多个人演唱会！' },
+                { author: '一个爱黄子的粉丝', date: '2026.03.15', content: '今天听了《元与均棋》现场，太震撼了！他的声音真的能穿透灵魂。希望以后能有更多个人演唱会！\n\n现场的氛围特别好，每一首歌都唱进了心里。尤其是最后那首安可曲，全场大合唱的时候真的忍不住流泪了。黄子在台上说“谢谢你们来听我唱歌”，那一刻觉得所有的喜欢都值得。\n\n回来后一直在回味，声音还在脑子里转。已经迫不及待想看下一场了！一定要抢到前排的票！\n\n另外，他穿的那件亮片外套太帅了，希望能出官方图～' },
                 { author: '小黄鸭', date: '2026.03.14', content: '每周的Vlog是我一周的快乐源泉，黄子太可爱了！后台花絮永远看不够～' },
                 { author: '兰州拉面', date: '2026.03.13', content: '从声入人入坑，这么多年看着他一步步成长，真的像看着一个老朋友在发光。加油！' },
                 { author: '音乐剧迷', date: '2026.03.12', content: '强烈推荐黄子的音乐剧现场！他的表演和唱功都超棒，希望以后能看到更多音乐剧作品。' },
@@ -272,11 +261,9 @@
             const modalClose = document.getElementById('modalClose');
             const placeholder = document.getElementById('placeholder');
 
-            // 渲染所有留言卡片
             function renderMessages() {
                 let html = '';
                 messages.forEach((msg, index) => {
-                    // 将内容中的换行符转为 <br> 以便显示
                     const contentHtml = msg.content.replace(/\n/g, '<br>');
                     html += `
                         <div class="message-card" data-index="${index}">
@@ -291,33 +278,26 @@
                     `;
                 });
                 grid.innerHTML = html;
-                placeholder.style.display = 'none'; // 隐藏占位提示
+                placeholder.style.display = 'none';
             }
 
             renderMessages();
 
-            // 双击卡片放大
             grid.addEventListener('dblclick', (e) => {
                 const card = e.target.closest('.message-card');
                 if (!card) return;
-
                 const index = card.dataset.index;
                 const msg = messages[index];
-
-                // 填充模态框内容
                 modalContent.innerHTML = msg.content.replace(/\n/g, '<br>');
                 modalAuthor.textContent = '✍️ ' + msg.author;
                 modalDate.textContent = '📅 ' + msg.date;
-
-                // 显示模态框
                 overlay.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+                document.body.style.overflow = 'hidden';
             });
 
-            // 关闭模态框（点击遮罩或关闭按钮）
             const closeModal = () => {
                 overlay.style.display = 'none';
-                document.body.style.overflow = ''; // 恢复背景滚动
+                document.body.style.overflow = '';
             };
 
             overlay.addEventListener('click', (e) => {
