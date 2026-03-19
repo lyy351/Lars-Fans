@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>滚动圆锥体卡片效果</title>
+    <title>50张卡片 · 3D圆锥滚动</title>
     <style>
         * {
             margin: 0;
@@ -11,120 +11,142 @@
             box-sizing: border-box;
         }
         body {
-            background: #1a1a1a;
+            background: #111;
             height: 100vh;
             overflow-y: scroll;
-            perspective: 1200px;
             font-family: sans-serif;
+            perspective: 1200px;
         }
-        /* 滚动容器，用于触发滚动进度 */
+        /* 长滚动区域 */
         .scroll-area {
-            height: 200vh; /* 让页面有滚动空间 */
+            height: 200vh;
             position: relative;
         }
-        /* 卡片容器，固定在视口内，方便观察3D效果 */
-        .cards-container {
+        /* 固定视口的3D容器 */
+        .stage {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
             transform-style: preserve-3d;
-            pointer-events: none; /* 让滚动穿透 */
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* 卡片组 */
+        .cards-group {
+            position: relative;
+            width: 1px;
+            height: 1px;
+            transform-style: preserve-3d;
         }
         .card {
-            width: 150px;
-            height: 200px;
-            background: #fff9f0;
-            border: 2px solid #b58b6b;
-            border-radius: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: absolute;
+            width: 80px;           /* 缩小卡片尺寸，适应更多卡片 */
+            height: 100px;
+            background: #fff9e6;
+            border: 2px solid #b87333;
+            border-radius: 6px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            text-align: center;
-            padding: 10px;
-            position: absolute;
+            font-weight: bold;
+            color: #5a3e1b;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
-            backface-visibility: hidden;
+            backface-visibility: visible;
+            left: -40px;    /* 宽度一半 */
+            top: -50px;     /* 高度一半 */
+            text-align: center;
         }
-        .card p {
-            background: rgba(255,255,240,0.8);
-            padding: 5px;
-            border-radius: 4px;
+        .card span {
+            background: rgba(255,255,200,0.8);
+            padding: 3px 6px;
+            border-radius: 12px;
         }
         .info {
             position: fixed;
             bottom: 20px;
             left: 20px;
             color: white;
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 8px;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
             z-index: 100;
         }
     </style>
 </head>
 <body>
     <div class="scroll-area" id="scrollArea">
-        <div class="cards-container" id="cardsContainer"></div>
+        <div class="stage">
+            <div class="cards-group" id="cardsGroup"></div>
+        </div>
     </div>
     <div class="info" id="info">滚动进度: 0.00</div>
 
     <script>
-        // 生成示例卡片数据
-        const cardCount = 12;
-        const container = document.getElementById('cardsContainer');
-        for (let i = 0; i < cardCount; i++) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `<p>留言 #${i + 1}<br>滚动锥体</p>`;
-            container.appendChild(card);
-        }
+        (function() {
+            const cardCount = 50;          // 50张卡片
+            const group = document.getElementById('cardsGroup');
+            
+            // 创建50张卡片
+            for (let i = 0; i < cardCount; i++) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<span>${i+1}</span>`;
+                group.appendChild(card);
+            }
 
-        const cards = document.querySelectorAll('.card');
-        const info = document.getElementById('info');
-        const scrollArea = document.getElementById('scrollArea');
+            const cards = document.querySelectorAll('.card');
+            const info = document.getElementById('info');
+            const scrollArea = document.getElementById('scrollArea');
 
-        // 圆锥参数
-        const coneHeight = 400;          // 圆锥总高度
-        const baseRadius = 300;           // 底部半径
-        const topRadius = 0;              // 顶部半径（锥尖）
+            // 圆锥参数
+            const coneHeight = 600;          // 总高度（增加一点让分布更舒展）
+            const baseRadius = 350;           // 底部半径
 
-        function updateCone(progress) {
-            // progress: 0 到 1，0 为平面散开（可自定义初始布局），1 为完全锥形
-            const angleStep = (2 * Math.PI) / cardCount;
+            function updateCone(progress) {
+                // progress 0 -> 1
+                const angleStep = (2 * Math.PI) / cardCount;
 
-            cards.forEach((card, index) => {
-                const angle = index * angleStep;
-                // 根据进度计算当前高度（从底部到顶部）
-                const y = (progress * coneHeight) - coneHeight/2;
-                // 当前半径：线性插值
-                const r = baseRadius * (1 - (y + coneHeight/2) / coneHeight);
-                const x = Math.cos(angle) * r;
-                const z = Math.sin(angle) * r;
-                const rotateY = angle; // 使卡片正面指向圆心
-                card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}rad)`;
+                cards.forEach((card, index) => {
+                    const angle = index * angleStep;
+
+                    // 当前高度：从 -coneHeight/2 到 +coneHeight/2
+                    const y = (progress * coneHeight) - coneHeight/2;
+
+                    // 当前半径：线性插值，底部半径最大，顶部为0
+                    const r = baseRadius * (1 - (y + coneHeight/2) / coneHeight);
+
+                    const x = Math.cos(angle) * r;
+                    const z = Math.sin(angle) * r;
+
+                    // 使卡片面向中心：绕Y轴旋转 angle 弧度
+                    // 保持卡片竖直（不绕X轴倾斜），这样卡片正面始终指向中心轴
+                    const rotateY = angle;
+
+                    card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}rad)`;
+                });
+
+                info.textContent = `滚动进度: ${progress.toFixed(2)}`;
+            }
+
+            // 监听滚动
+            scrollArea.addEventListener('scroll', () => {
+                const scrollTop = scrollArea.scrollTop;
+                const maxScroll = scrollArea.scrollHeight - window.innerHeight;
+                let progress = scrollTop / maxScroll;
+                progress = Math.min(1, Math.max(0, progress));
+                updateCone(progress);
             });
-            info.textContent = `滚动进度: ${progress.toFixed(2)}`;
-        }
 
-        // 监听滚动
-        scrollArea.addEventListener('scroll', () => {
-            const scrollTop = scrollArea.scrollTop;
-            const maxScroll = scrollArea.scrollHeight - window.innerHeight;
-            let progress = scrollTop / maxScroll;
-            progress = Math.min(1, Math.max(0, progress));
-            updateCone(progress);
-        });
-
-        updateCone(0);
+            // 初始调用
+            updateCone(0);
+        })();
     </script>
 </body>
 </html>
