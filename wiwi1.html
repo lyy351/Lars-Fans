@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>冷白卡片 · 克莱因蓝字 · 北极燕鸥</title>
+    <title>北极燕鸥与嘉兰百合 · 三章</title>
     <style>
-        /* 预览版样式 (无 #workskin 前缀) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            background: #ffffff;  /* 网页整体背景纯白 */
+            background: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,13 +19,10 @@
             font-family: 'Georgia', 'Times New Roman', '宋体', 'Songti SC', serif;
             padding: 30px 15px;
         }
-
-        /* 纸张：冷白底色 (冰块/泉水/蔚蓝感的冷白) + 白色斜短线（45°，长度≈3-5字） */
         .paper {
             max-width: 800px;
             width: 100%;
-            background-color: #f0f8ff;   /* 冷白色，带轻微蓝调 */
-            /* 多重背景：每个linear-gradient是一条45°白色短线，长度50-90px */
+            background-color: #f0f8ff;
             background-image: 
                 linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
                 linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.5) 52%, transparent 55%),
@@ -65,69 +60,71 @@
             padding: 70px 70px 75px 70px;
             position: relative;
             line-height: 2.0;
-            color: #0038a8;           /* 明亮克莱因蓝（带紫调、高饱和） */
+            color: #0038a8;
             font-size: 20px;
             letter-spacing: 0.02em;
         }
-
         .page-number {
             position: absolute;
             top: 35px;
             left: 45px;
             font-size: 25px;
             font-weight: 500;
-            color: #b34e7a;              /* 深粉 */
+            color: #b34e7a;
             font-family: 'Avenir', 'Helvetica Neue', sans-serif;
             opacity: 0.9;
             text-shadow: 1px 1px 0 #ffffff;
         }
-
         .title-decoration {
             margin-top: 30px;
-            border-top: 3px solid #2f5c8a;   /* 深蓝 */
+            border-top: 3px solid #2f5c8a;
             width: 90px;
             margin-bottom: 25px;
             opacity: 0.8;
         }
-
         .main-title {
             font-size: 38px;
             font-weight: bold;
-            color: #5d3f8a;                  /* 深紫 */
+            color: #5d3f8a;
             margin-bottom: 35px;
             line-height: 1.3;
             letter-spacing: 0.5px;
             text-shadow: 1px 1px 0 #ffffff;
         }
-
+        .content h3 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #5d3f8a;
+            margin: 1.5em 0 0.5em 0;
+            letter-spacing: 1px;
+            border-left: 5px solid #b34e7a;
+            padding-left: 15px;
+        }
         .content p {
             text-indent: 2em;
             margin: 1em 0;
             word-break: break-word;
             text-align: justify;
-            color: #0038a8;                   /* 正文明亮克莱因蓝 */
+            color: #0038a8;
         }
-
         .content p:first-of-type::first-letter {
             font-size: 2.8em;
             float: left;
             line-height: 0.8;
             margin-right: 8px;
-            color: #b34e7a;                     /* 深粉 */
+            color: #b34e7a;
             font-weight: 600;
             text-shadow: 1px 1px 3px #ffd0e0;
         }
-
         .ellipsis {
             text-align: right;
             font-size: 38px;
-            color: #2f5c8a;                       /* 深蓝 */
+            color: #2f5c8a;
             margin-top: 30px;
             letter-spacing: 8px;
             opacity: 0.8;
             font-family: 'Avenir', sans-serif;
         }
-
         .footer {
             margin-top: 60px;
             display: flex;
@@ -159,7 +156,6 @@
             text-shadow: 0 0 8px #7f9fd0;
             font-size: 26px;
         }
-
         .float-dot {
             position: absolute;
             bottom: 30px;
@@ -169,7 +165,6 @@
             opacity: 0.6;
             letter-spacing: 6px;
         }
-
         @media (max-width: 550px) {
             .paper { padding: 45px 30px; }
             .main-title { font-size: 30px; }
@@ -183,11 +178,23 @@
         <div class="title-decoration"></div>
         <h1 class="main-title">02 北极燕鸥与嘉兰百合</h1>
         <div class="content">
-            <p>这就是文朝菌的两次生命。</p>
-            <p>第一次，作为海星，在黑暗和寒冷中，和无数的海洋生灵组成海洋冰柱的星纹，无知地走向死亡，恍惚以为梦。那时，她在北冰洋。</p>
-            <p>第二次，她是初孵的飞鱼，十几日见证瑰丽的海底，最终成为她之所向的口中餐，未经咀嚼完好地被吞咽，心脏被蚀成沙砾大小的晶石，又与骨血一同被胃液淹没炼化，成为他的一部分。十几日，她一直处在浅海区，所以她游高一点，便尚且能从光线变化猜测日升月落，她这一次生命完结前，倘若再往前游十几米，她便能见到深海的模样。</p>
-            <p>当然，这一切的细节，文朝菌无从知晓。</p>
-            <p>在化作飞鸟的头几个月里，她总算可以在一个相对稳定的环境来思考自己前面的遭遇，但她</p>
+            <!-- 第一节：北极燕鸥 -->
+            <h3>Ⅰ · 北极燕鸥</h3>
+            <p>它的一生是在两极之间折叠的。每年极昼结束时，北极燕鸥便从格陵兰的岩崖上跃起，开始一场没有尽头的追逐——追逐夏天，追逐永不沉落的太阳。四万公里的迁徙，翅膀切开十二次日夜，最终落在南极的冰缘上。那时它不知道自己飞了多久，只知道风一直在耳边说着一种听不懂的语言。</p>
+            <p>文朝菌曾见过一只受伤的燕鸥，在挪威的渔村外。它的一只翅膀垂着，眼睛却望着北方。村人说它掉队了，活不过这个冬天。但文朝菌看见它的瞳孔里有一片海，那片海倒映着它曾经飞过的所有天空。她蹲下来，想触碰它的羽毛，手刚伸出，燕鸥便挣扎着飞起，歪歪斜斜，却一直向北。那天傍晚，它消失在海平线上，像一个不肯落下的句号。</p>
+            <p>后来她梦见自己变成一只燕鸥，羽毛是蓝色的，翅膀上印着嘉兰百合的花纹。她在梦里一直飞，从北极飞到南极，再从南极飞回北极。每一次经过赤道，身体就会轻一些，最后轻到只剩下一个念头：飞下去，直到融化在光里。</p>
+            
+            <!-- 第二节：嘉兰百合 -->
+            <h3>Ⅱ · 嘉兰百合</h3>
+            <p>嘉兰百合开在热带的山坡上，花瓣翻卷如火焰，边缘镶着金黄，向内渐变成猩红。它的花语是“荣光”，但文朝菌觉得它更像一种燃烧——每一片花瓣都是一缕凝固的火苗，在风中微微颤抖，却永不熄灭。当地人告诉她，这种百合的球茎有毒，误食会致命，可偏偏又有一种蛾子，只吸它的花蜜，然后替它传粉。美丽与死亡，总是纠缠得这样紧。</p>
+            <p>她曾经在雨后的清晨见过一整片嘉兰百合。露水挂在花瓣的卷须上，折射出细碎的光，整片山坡像在燃烧，又像在流泪。她走近一朵，俯身看进花心，发现里面有只死去的飞蛾，翅膀完好，身体已经干枯。那一刻她忽然明白，飞蛾不是误入歧途，它是自己选择死在这里——为了离那种燃烧近一点，再近一点。</p>
+            <p>文朝菌摘下一片花瓣夹在书里。几个月后书打开，花瓣已经变成透明的薄膜，纹理清晰，颜色褪尽，却仍保持着火焰的形状。她想，有些东西褪了色，才露出真正的骨骼。嘉兰百合的骨骼，就是那一缕向上的姿态，即使化为灰烬，也还是燃着的。</p>
+            
+            <!-- 第三节：文朝菌 -->
+            <h3>Ⅲ · 文朝菌</h3>
+            <p>她一直在想自己的两次生命。第一次在海星的体内，无知无觉地沉入北冰洋的黑暗，与无数星纹一起，成为海底冰柱的装饰。那时她没有名字，没有记忆，只有一种模糊的寒冷，像隔着很厚的玻璃感觉到的那种。后来她变成飞鱼，在浅海里游了十几天，看见光从水面上漏下来，一缕一缕，像嘉兰百合的花瓣。她拼命向上游，想离光近一点，却被一张嘴吞了下去。心脏变成晶石，骨血被消化，但她的一部分留了下来，留在那只鸟的身体里。</p>
+            <p>化作飞鸟之后，她开始思考。思考很痛苦，因为每一次思考都会让她想起那些无法亲历的景象：如果再游十几米，就能见到深海的模样；如果再坚持一会儿，也许能看见真正的极光。但思考也是甜的，因为那些缺失的部分，可以用想象填满。她在想象中潜入了深海，看见了发光的鱼群和寂静的火山；她在想象中追上了那只燕鸥，一起飞过了两极。想象是她的第三次生命。</p>
+            <p>如今她站在山坡上，面前是嘉兰百合燃烧般的海。风把花瓣的轮廓吹进她的眼睛里，她忽然觉得自己又变成了飞鱼，又变成了海星，又变成了那只北极燕鸥。所有的生命叠在一起，像一本翻旧的书。书里有寒冷，有温暖，有无知，有懂得。而最后一页，写着一行小字：“光不会熄灭，只会转移。”她合上书，转身走下山坡，留下一串脚印，很快就被雨水抹平。</p>
         </div>
         <div class="ellipsis">······</div>
         <div class="footer">
@@ -198,10 +205,6 @@
         </div>
         <div class="float-dot">·  ·  ·</div>
     </div>
-    <!-- 说明：
-        网页整体背景纯白 (#ffffff)，正文卡片背景冷白 (#f0f8ff)，正文字体明亮克莱因蓝 (#0038a8)，
-        标题及点缀保持深粉、深蓝、深紫、白色。斜线雨丝零散分布，长度50-90px。
-        用于AO3时请在所有CSS选择器前加 #workskin。
-    -->
+    <!-- 说明：三个小节，每节三个段落。文字风格延续原文的忧郁与清新。背景冷白，字体克莱因蓝。用于AO3时请在所有CSS选择器前加 #workskin。 -->
 </body>
 </html>
