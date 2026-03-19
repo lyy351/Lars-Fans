@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>克莱因蓝 · 北极燕鸥与嘉兰百合</title>
+    <title>克莱因蓝调 · 北极燕鸥与嘉兰百合</title>
     <style>
         /* 预览版样式 (无 #workskin 前缀) */
         * {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #0f1a2b;  /* 深色背景突出纸张 */
+            background: #8fa3c0;  /* 深蓝灰背景，突出纸张 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,11 +22,11 @@
             padding: 30px 15px;
         }
 
-        /* 纸张：克莱因蓝底色 + 白色斜短线（45°，长度≈3-5字） */
+        /* 纸张：偏克莱因蓝的浅蓝底色 + 白色斜短线（45°，长度≈3-5字） */
         .paper {
             max-width: 800px;
             width: 100%;
-            background-color: #0035a0;   /* 克莱因蓝风格 (IKB近似) */
+            background-color: #6c8ec9;   /* 偏克莱因蓝的浅蓝 (克莱因蓝倾向的浅色) */
             /* 多重背景：每个linear-gradient是一条45°白色短线，长度50-90px */
             background-image: 
                 /* 短线1 */ linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
@@ -92,105 +92,105 @@
                 26% 44%,    /* 短线19 */
                 62% 95%;    /* 短线20 */
             background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-            box-shadow: 0 20px 40px rgba(0, 20, 60, 0.7), 0 8px 16px rgba(0, 0, 0, 0.6), inset 0 0 0 1px #3f69b0, inset 0 0 30px #1f4a9e;
+            box-shadow: 0 20px 40px rgba(70, 100, 130, 0.3), 0 8px 16px rgba(50, 70, 100, 0.2), inset 0 0 0 1px #ffffff, inset 0 0 30px #ffffffcc;
             border-radius: 4px;
             padding: 70px 70px 75px 70px;
             position: relative;
             line-height: 2.0;
-            color: #c4d7f0;           /* 浅蓝白正文，与深底分明 */
+            color: #002b5c;           /* 克莱因蓝深色正文 (深蓝) */
             font-size: 20px;
             letter-spacing: 0.02em;
         }
 
-        /* 左上角数字：浅粉 */
+        /* 左上角数字：深粉 */
         .page-number {
             position: absolute;
             top: 35px;
             left: 45px;
             font-size: 25px;
             font-weight: 500;
-            color: #f0b0c0;              /* 浅粉 */
+            color: #b34e7a;              /* 深粉 */
             font-family: 'Avenir', 'Helvetica Neue', sans-serif;
             opacity: 0.9;
-            text-shadow: 0 0 5px #0035a0;
+            text-shadow: 1px 1px 0 #ffffff;
         }
 
-        /* 标题上方装饰线：浅蓝 */
+        /* 标题上方装饰线：深蓝 */
         .title-decoration {
             margin-top: 30px;
-            border-top: 3px solid #7f9fd0;   /* 浅蓝 */
+            border-top: 3px solid #2f5c8a;   /* 深蓝 */
             width: 90px;
             margin-bottom: 25px;
             opacity: 0.8;
         }
 
-        /* 主标题：浅紫，加粗 */
+        /* 主标题：深紫，加粗 */
         .main-title {
             font-size: 38px;               /* 标题加大 */
-            font-weight: bold;              /* 加粗 (700) */
-            color: #b8a2e3;                  /* 浅紫 */
+            font-weight: bold;              /* 加粗 */
+            color: #5d3f8a;                  /* 深紫 */
             margin-bottom: 35px;
             line-height: 1.3;
             letter-spacing: 0.5px;
-            text-shadow: 0 0 5px #0035a0;
+            text-shadow: 1px 1px 0 #ffffff;
         }
 
-        /* 正文段落：浅蓝灰 */
+        /* 正文段落：克莱因蓝深色 */
         .content p {
             text-indent: 2em;
             margin: 1em 0;
             word-break: break-word;
             text-align: justify;
-            color: #c4d7f0;                   /* 浅蓝白 */
+            color: #002b5c;                   /* 克莱因蓝深色 */
         }
 
-        /* 首字下沉：浅粉 */
+        /* 首字下沉：深粉 */
         .content p:first-of-type::first-letter {
             font-size: 2.8em;
             float: left;
             line-height: 0.8;
             margin-right: 8px;
-            color: #f0b0c0;                     /* 浅粉 */
+            color: #b34e7a;                     /* 深粉 */
             font-weight: 600;
-            text-shadow: 0 0 5px #0035a0;
+            text-shadow: 1px 1px 3px #ffd0e0;
         }
 
-        /* 省略号：浅蓝 */
+        /* 省略号：深蓝 */
         .ellipsis {
             text-align: right;
             font-size: 38px;
-            color: #7f9fd0;                       /* 浅蓝 */
+            color: #2f5c8a;                       /* 深蓝 */
             margin-top: 30px;
             letter-spacing: 8px;
             opacity: 0.8;
             font-family: 'Avenir', sans-serif;
         }
 
-        /* 页脚：浅粉、浅蓝、浅紫、白 */
+        /* 页脚：深粉、深蓝、深紫、白 */
         .footer {
             margin-top: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 18px;
-            border-top: 2px dashed #6f8ab0;       /* 浅蓝紫虚线 */
+            border-top: 2px dashed #7f6a9e;       /* 深紫虚线 */
             padding-top: 22px;
             font-style: italic;
         }
         .footer .left-symbols {
             font-style: normal;
             letter-spacing: 5px;
-            color: #f0b0c0;                         /* 浅粉 */
+            color: #b34e7a;                         /* 深粉 */
             font-size: 26px;
         }
         .footer .center-text {
-            color: #7f9fd0;                          /* 浅蓝 */
+            color: #2f5c8a;                          /* 深蓝 */
             font-style: normal;
             font-weight: 500;
         }
         .footer .right-symbols {
             font-size: 28px;
-            color: #b8a2e3;                           /* 浅紫 */
+            color: #5d3f8a;                           /* 深紫 */
             letter-spacing: 6px;
         }
         .footer .extra-white {
@@ -220,16 +220,16 @@
 </head>
 <body>
     <div class="paper">
-        <!-- 左上角数字（浅粉） -->
+        <!-- 左上角数字（深粉） -->
         <div class="page-number">754</div>
 
-        <!-- 标题上方装饰线（浅蓝） -->
+        <!-- 标题上方装饰线（深蓝） -->
         <div class="title-decoration"></div>
 
-        <!-- 主标题（浅紫，加粗） -->
+        <!-- 主标题（深紫，加粗） -->
         <h1 class="main-title">02 北极燕鸥与嘉兰百合</h1>
 
-        <!-- 正文内容 -->
+        <!-- 正文内容（克莱因蓝深色） -->
         <div class="content">
             <p>这就是文朝菌的两次生命。</p>
             <p>第一次，作为海星，在黑暗和寒冷中，和无数的海洋生灵组成海洋冰柱的星纹，无知地走向死亡，恍惚以为梦。那时，她在北冰洋。</p>
@@ -238,14 +238,14 @@
             <p>在化作飞鸟的头几个月里，她总算可以在一个相对稳定的环境来思考自己前面的遭遇，但她</p>
         </div>
 
-        <!-- 省略号（浅蓝） -->
+        <!-- 省略号（深蓝） -->
         <div class="ellipsis">······</div>
 
-        <!-- 页脚：浅粉、浅蓝、浅紫、白 -->
+        <!-- 页脚：深粉、深蓝、深紫、白 -->
         <div class="footer">
-            <span class="left-symbols">✧ ✦ ✧</span>          <!-- 浅粉 -->
-            <span class="center-text">北极燕鸥 · 嘉兰百合</span>  <!-- 浅蓝 -->
-            <span class="right-symbols">✧ ✧ ✧</span>          <!-- 浅紫 -->
+            <span class="left-symbols">✧ ✦ ✧</span>          <!-- 深粉 -->
+            <span class="center-text">北极燕鸥 · 嘉兰百合</span>  <!-- 深蓝 -->
+            <span class="right-symbols">✧ ✧ ✧</span>          <!-- 深紫 -->
             <span class="extra-white">✧</span>                 <!-- 白 -->
         </div>
 
@@ -254,8 +254,8 @@
     </div>
 
     <!-- 说明：
-        - 背景底色改为克莱因蓝 (#0035a0)，叠加20条45°白色短线，长度50-90px（约3-5字），零散分布。
-        - 标题加粗（font-weight: bold），所有文字颜色调整为浅蓝、浅粉、浅紫色系，与深色背景清晰对比。
+        - 背景底色为偏克莱因蓝的浅蓝 (#6c8ec9)，叠加20条45°白色短线，长度50-90px（约3-5字），零散分布。
+        - 正文字体为克莱因蓝深色 (#002b5c)，标题加粗，其余颜色（深粉、深蓝、深紫、白）保持不变以确保清晰对比。
         - 用于AO3时，请在每条CSS规则的选择器前添加 #workskin（例如 .paper 改为 #workskin .paper）。
     -->
 </body>
