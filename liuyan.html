@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄子弘凡 · 留言板 · 信纸瀑布流</title>
+    <style>
+        /* 全局重置与字体 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5efe6;  /* 暖白旧纸背景 */
+            font-family: 'Segoe UI', '华文楷体', cursive, sans-serif;
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        /* 主容器 */
+        .guestbook-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 28px;
+            color: #2C1810;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #FFD93D, #FF8A5C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #FF8A5C;
+            letter-spacing: 2px;
+        }
+
+        /* 瀑布流网格 — 使用多列布局实现类似Pinterest的效果 */
+        .masonry {
+            column-count: 3;          /* 默认三列 */
+            column-gap: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+        @media (max-width: 500px) {
+            .masonry {
+                column-count: 1;
+            }
+        }
+
+        /* 留言卡片 */
+        .message-card {
+            break-inside: avoid;        /* 防止卡片被截断到两列 */
+            margin-bottom: 20px;
+            background: #fff9f0;         /* 信纸底色（备选） */
+            /* 信纸纹理：先用纯CSS绘制横线，后期可替换为图片 */
+            background-image: 
+                repeating-linear-gradient(
+                    to bottom,
+                    #e8d8c0 0px,
+                    #e8d8c0 1px,
+                    transparent 1px,
+                    transparent 24px
+                );
+            background-size: 100% 24px;  /* 横线间距24px */
+            background-position: 0 20px;  /* 从顶部20px开始画线，留出留白 */
+            background-repeat: no-repeat;  /* 不重复，由repeating-linear-gradient负责 */
+            /* 如果有真实的纸纹图片，可以用以下方式叠加：
+            background-image: 
+                repeating-linear-gradient(to bottom, #e8d8c0 0px, #e8d8c0 1px, transparent 1px, transparent 24px),
+                url('../images/paper-texture.png');
+            background-blend-mode: multiply;
+            */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05);
+            padding: 20px 20px 25px 20px;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 216, 138, 0.4);
+        }
+
+        .message-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(255, 138, 92, 0.25);
+        }
+
+        /* 留言内容区域 — 固定高度，内部滚动 */
+        .message-content {
+            max-height: 180px;           /* 固定高度，超出可滚动 */
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #2C1810;
+            position: relative;
+            z-index: 2;
+            /* 确保文字在横线之上 */
+        }
+
+        .message-content p {
+            margin-bottom: 1em;
+        }
+
+        /* 自定义滚动条（微调） */
+        .message-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .message-content::-webkit-scrollbar-thumb {
+            background: #FF8A5C;
+            border-radius: 10px;
+        }
+
+        /* 留言者信息 */
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #FF8A5C;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .author {
+            font-weight: bold;
+            color: #FF6B6B;
+        }
+
+        .date {
+            font-style: italic;
+            color: #8B6B4D;
+        }
+
+        /* 双击放大模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-card {
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            background: #fff9f0;
+            /* 同样应用信纸背景 */
+            background-image: 
+                repeating-linear-gradient(
+                    to bottom,
+                    #e8d8c0 0px,
+                    #e8d8c0 1px,
+                    transparent 1px,
+                    transparent 24px
+                );
+            background-size: 100% 24px;
+            background-position: 0 20px;
+            background-repeat: no-repeat;
+            border-radius: 24px;
+            padding: 30px 30px 30px 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow-y: auto;
+            border: 2px solid #FFD93D;
+        }
+
+        .modal-card .message-content {
+            max-height: none;           /* 放大后取消高度限制 */
+            overflow-y: visible;
+            font-size: 16px;
+            padding-right: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #2C1810;
+            background: rgba(255,255,255,0.5);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.2s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: #FF8A5C;
+            color: white;
+        }
+
+        /* 示例占位说明 */
+        .placeholder-note {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="guestbook-container">
+        <h1>📬 留言板 · 信纸漂流</h1>
+
+        <!-- 瀑布流容器 -->
+        <div class="masonry" id="masonryGrid">
+            <!-- 留言卡片由 JS 动态生成，但先放置静态示例以便直接预览 -->
+        </div>
+
+        <div class="placeholder-note" id="placeholder">
+            ⭐ 双击任意留言卡片可放大查看 ⭐
+        </div>
+    </div>
+
+    <!-- 双击放大的模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card" id="modalCard">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div class="message-content" id="modalContent"></div>
+            <div class="message-meta">
+                <span class="author" id="modalAuthor"></span>
+                <span class="date" id="modalDate"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // 示例留言数据（实际可从服务器加载）
+            const messages = [
+                { author: '一个爱黄子的粉丝', date: '2026.03.15', content: '今天听了《元与均棋》现场，太震撼了！他的声音真的能穿透灵魂。希望以后能有更多个人演唱会！' },
+                { author: '小黄鸭', date: '2026.03.14', content: '每周的Vlog是我一周的快乐源泉，黄子太可爱了！后台花絮永远看不够～' },
+                { author: '兰州拉面', date: '2026.03.13', content: '从声入人入坑，这么多年看着他一步步成长，真的像看着一个老朋友在发光。加油！' },
+                { author: '音乐剧迷', date: '2026.03.12', content: '强烈推荐黄子的音乐剧现场！他的表演和唱功都超棒，希望以后能看到更多音乐剧作品。' },
+                { author: '路人转粉', date: '2026.03.11', content: '偶然刷到他的综艺片段，被圈粉了。然后来这个档案馆逛了一圈，太全了！谢谢站长～' },
+                { author: '伯克利校友', date: '2026.03.10', content: '在伯克利的时候就听说他了，没想到真的火起来了。学弟加油！' },
+                { author: '小太阳', date: '2026.03.09', content: '黄子就像小太阳一样温暖！每次心情不好就来看他的视频，立马被治愈。' },
+                { author: '演唱会常客', date: '2026.03.08', content: '北京站、上海站都去了，下一站什么时候来广州呀？期待ing' },
+                { author: '颜控晚期', date: '2026.03.07', content: '他的杂志图我每一张都收藏了！这个档案馆的图鉴功能太棒了，希望继续更新～' },
+                { author: '默默支持', date: '2026.03.06', content: '不常发言，但一直在默默关注。黄子值得被更多人看见。' },
+                { author: '新粉报到', date: '2026.03.05', content: '刚入坑，正在补课中！求推荐必看的综艺或舞台～' }
+            ];
+
+            const grid = document.getElementById('masonryGrid');
+            const overlay = document.getElementById('modalOverlay');
+            const modalContent = document.getElementById('modalContent');
+            const modalAuthor = document.getElementById('modalAuthor');
+            const modalDate = document.getElementById('modalDate');
+            const modalClose = document.getElementById('modalClose');
+            const placeholder = document.getElementById('placeholder');
+
+            // 渲染所有留言卡片
+            function renderMessages() {
+                let html = '';
+                messages.forEach((msg, index) => {
+                    // 将内容中的换行符转为 <br> 以便显示
+                    const contentHtml = msg.content.replace(/\n/g, '<br>');
+                    html += `
+                        <div class="message-card" data-index="${index}">
+                            <div class="message-content">
+                                ${contentHtml}
+                            </div>
+                            <div class="message-meta">
+                                <span class="author">✍️ ${msg.author}</span>
+                                <span class="date">📅 ${msg.date}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = html;
+                placeholder.style.display = 'none'; // 隐藏占位提示
+            }
+
+            renderMessages();
+
+            // 双击卡片放大
+            grid.addEventListener('dblclick', (e) => {
+                const card = e.target.closest('.message-card');
+                if (!card) return;
+
+                const index = card.dataset.index;
+                const msg = messages[index];
+
+                // 填充模态框内容
+                modalContent.innerHTML = msg.content.replace(/\n/g, '<br>');
+                modalAuthor.textContent = '✍️ ' + msg.author;
+                modalDate.textContent = '📅 ' + msg.date;
+
+                // 显示模态框
+                overlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            });
+
+            // 关闭模态框（点击遮罩或关闭按钮）
+            const closeModal = () => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = ''; // 恢复背景滚动
+            };
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal();
+            });
+            modalClose.addEventListener('click', closeModal);
+        })();
+    </script>
+</body>
+</html>
