@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滚动圆锥体卡片效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1a1a1a;
+            height: 100vh;
+            overflow-y: scroll;
+            perspective: 1200px;
+            font-family: sans-serif;
+        }
+        /* 滚动容器，用于触发滚动进度 */
+        .scroll-area {
+            height: 200vh; /* 让页面有滚动空间 */
+            position: relative;
+        }
+        /* 卡片容器，固定在视口内，方便观察3D效果 */
+        .cards-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            pointer-events: none; /* 让滚动穿透 */
+        }
+        .card {
+            width: 150px;
+            height: 200px;
+            background: #fff9f0;
+            border: 2px solid #b58b6b;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            backface-visibility: hidden;
+        }
+        .card p {
+            background: rgba(255,255,240,0.8);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-area" id="scrollArea">
+        <div class="cards-container" id="cardsContainer"></div>
+    </div>
+    <div class="info" id="info">滚动进度: 0.00</div>
+
+    <script>
+        // 生成示例卡片数据
+        const cardCount = 12;
+        const container = document.getElementById('cardsContainer');
+        for (let i = 0; i < cardCount; i++) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<p>留言 #${i + 1}<br>滚动锥体</p>`;
+            container.appendChild(card);
+        }
+
+        const cards = document.querySelectorAll('.card');
+        const info = document.getElementById('info');
+        const scrollArea = document.getElementById('scrollArea');
+
+        // 圆锥参数
+        const coneHeight = 400;          // 圆锥总高度
+        const baseRadius = 300;           // 底部半径
+        const topRadius = 0;              // 顶部半径（锥尖）
+
+        function updateCone(progress) {
+            // progress: 0 到 1，0 为平面散开（可自定义初始布局），1 为完全锥形
+            const angleStep = (2 * Math.PI) / cardCount;
+
+            cards.forEach((card, index) => {
+                const angle = index * angleStep;
+                // 根据进度计算当前高度（从底部到顶部）
+                const y = (progress * coneHeight) - coneHeight/2;
+                // 当前半径：线性插值
+                const r = baseRadius * (1 - (y + coneHeight/2) / coneHeight);
+                const x = Math.cos(angle) * r;
+                const z = Math.sin(angle) * r;
+                const rotateY = angle; // 使卡片正面指向圆心
+                card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}rad)`;
+            });
+            info.textContent = `滚动进度: ${progress.toFixed(2)}`;
+        }
+
+        // 监听滚动
+        scrollArea.addEventListener('scroll', () => {
+            const scrollTop = scrollArea.scrollTop;
+            const maxScroll = scrollArea.scrollHeight - window.innerHeight;
+            let progress = scrollTop / maxScroll;
+            progress = Math.min(1, Math.max(0, progress));
+            updateCone(progress);
+        });
+
+        updateCone(0);
+    </script>
+</body>
+</html>
