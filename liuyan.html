@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>复古信纸 · 留言板</title>
+    <title>复古信纸 · 毛玻璃背景</title>
     <style>
         * {
             margin: 0;
@@ -11,16 +11,32 @@
             box-sizing: border-box;
         }
 
+        /* 页面最底层背景：渐变 + 微纹理，模拟光线变化，作为毛玻璃背后的风景 */
         body {
-            background: #e1d5c0;  /* 深一点的旧纸色，衬托信纸 */
+            /* 基础背景色 */
+            background: #b8a28c;  /* 暖灰底 */
+            /* 叠加一层复杂的渐变，让背景有深度 */
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 240, 210, 0.4) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(210, 180, 140, 0.3) 0%, transparent 40%),
+                linear-gradient(125deg, #d9c8b2 0%, #b8a28c 100%);
+            min-height: 100vh;
             font-family: 'Segoe UI', '华文楷体', cursive, sans-serif;
             padding: 30px 20px;
-            min-height: 100vh;
+            position: relative;
         }
 
+        /* 毛玻璃主容器：半透明 + 背景模糊 */
         .guestbook-container {
             max-width: 1400px;
             margin: 0 auto;
+            background: rgba(245, 235, 220, 0.6);   /* 半透米色 */
+            backdrop-filter: blur(12px);              /* 毛玻璃核心 */
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px 40px 20px 20px;
+            padding: 30px 30px 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 245, 235, 0.5);
         }
 
         h1 {
@@ -54,13 +70,11 @@
             }
         }
 
-        /* 复古信纸卡片 */
+        /* 复古信纸卡片（不透明，保持清晰） */
         .message-card {
             break-inside: avoid;
             margin-bottom: 20px;
-            /* 基础纸张色 */
-            background-color: #faf0e6;
-            /* 清晰的直线横线：1px 实线，间距24px */
+            background-color: #faf0e6;                 /* 实色背景 */
             background-image: 
                 repeating-linear-gradient(
                     to bottom,
@@ -70,17 +84,16 @@
                     transparent 24px
                 );
             background-size: 100% 24px;
-            background-position: 0 20px;   /* 从距离顶部20px处开始画线，留出天头 */
-            background-repeat: no-repeat;    /* 防止重复，由 repeating-linear-gradient 控制 */
-            /* 边缘轻微泛黄和阴影，增加复古感 */
+            background-position: 0 20px;
+            background-repeat: no-repeat;
             box-shadow: 0 4px 12px rgba(90, 60, 30, 0.15),
                         0 1px 2px rgba(0,0,0,0.05),
                         inset 0 0 0 1px rgba(255, 245, 220, 0.8);
-            border-radius: 4px 12px 12px 4px;  /* 左侧稍微平直，模仿便签本 */
+            border-radius: 4px 12px 12px 4px;
             padding: 20px 20px 25px 20px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
-            border-left: 4px solid #b58b6b;   /* 左侧加一条深色装饰边，像老式信纸 */
+            border-left: 4px solid #b58b6b;
         }
 
         .message-card:hover {
@@ -95,11 +108,10 @@
             padding-right: 10px;
             margin-top: 15px;
             font-size: 14px;
-            line-height: 24px;      /* 与横线间距一致，让文字正好写在横线上 */
+            line-height: 24px;      /* 与横线间距一致 */
             color: #3e2e1f;
             position: relative;
             z-index: 2;
-            /* 让滚动条窄一点，更精致 */
             scrollbar-width: thin;
             scrollbar-color: #b58b6b #f0e0d0;
         }
@@ -210,7 +222,7 @@
 
         .placeholder-note {
             text-align: center;
-            color: #8b7a6a;
+            color: #5e4a38;
             font-style: italic;
             margin-top: 40px;
         }
@@ -218,7 +230,7 @@
 </head>
 <body>
     <div class="guestbook-container">
-        <h1>📬 留言板 · 复古信纸</h1>
+        <h1>📬 留言板 · 毛玻璃信纸</h1>
 
         <div class="masonry" id="masonryGrid"></div>
         <div class="placeholder-note" id="placeholder">
