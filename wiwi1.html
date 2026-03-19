@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>冷白底 · 克莱因蓝字 · 北极燕鸥</title>
+    <title>冷白卡片 · 克莱因蓝字 · 北极燕鸥</title>
     <style>
         /* 预览版样式 (无 #workskin 前缀) */
         * {
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #8fa3c0;  /* 外层背景，透过半透明纸张可见，但不影响整体 */
+            background: #ffffff;  /* 网页整体背景纯白 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,11 +22,11 @@
             padding: 30px 15px;
         }
 
-        /* 纸张：冷白底色 + 白色斜短线（45°，长度≈3-5字） */
+        /* 纸张：冷白底色 (冰块/泉水/蔚蓝感的冷白) + 白色斜短线（45°，长度≈3-5字） */
         .paper {
             max-width: 800px;
             width: 100%;
-            background-color: #f4f8ff;   /* 极浅冷白，带轻微蓝调 */
+            background-color: #f0f8ff;   /* 冷白色，带轻微蓝调 */
             /* 多重背景：每个linear-gradient是一条45°白色短线，长度50-90px */
             background-image: 
                 linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.55) 52%, transparent 55%),
@@ -199,7 +199,7 @@
         <div class="float-dot">·  ·  ·</div>
     </div>
     <!-- 说明：
-        背景底色为冷白 #f4f8ff（极浅冷白），正文字体 #0038a8（明亮克莱因蓝），
+        网页整体背景纯白 (#ffffff)，正文卡片背景冷白 (#f0f8ff)，正文字体明亮克莱因蓝 (#0038a8)，
         标题及点缀保持深粉、深蓝、深紫、白色。斜线雨丝零散分布，长度50-90px。
         用于AO3时请在所有CSS选择器前加 #workskin。
     -->
