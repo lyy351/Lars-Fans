@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>复古信纸 · 毛玻璃背景</title>
+    <title>黄子弘凡 · 留言板</title>
     <style>
         * {
             margin: 0;
@@ -11,11 +11,8 @@
             box-sizing: border-box;
         }
 
-        /* 页面最底层背景：渐变 + 微纹理，模拟光线变化，作为毛玻璃背后的风景 */
         body {
-            /* 基础背景色 */
             background: #b8a28c;  /* 暖灰底 */
-            /* 叠加一层复杂的渐变，让背景有深度 */
             background-image: 
                 radial-gradient(circle at 20% 30%, rgba(255, 240, 210, 0.4) 0%, transparent 30%),
                 radial-gradient(circle at 80% 70%, rgba(210, 180, 140, 0.3) 0%, transparent 40%),
@@ -23,15 +20,14 @@
             min-height: 100vh;
             font-family: 'Segoe UI', '华文楷体', cursive, sans-serif;
             padding: 30px 20px;
-            position: relative;
         }
 
-        /* 毛玻璃主容器：半透明 + 背景模糊 */
+        /* 毛玻璃主容器 */
         .guestbook-container {
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(245, 235, 220, 0.6);   /* 半透米色 */
-            backdrop-filter: blur(12px);              /* 毛玻璃核心 */
+            background: rgba(245, 235, 220, 0.6);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 40px 40px 20px 20px;
             padding: 30px 30px 40px 30px;
@@ -70,11 +66,11 @@
             }
         }
 
-        /* 复古信纸卡片（不透明，保持清晰） */
+        /* 复古信纸卡片 */
         .message-card {
             break-inside: avoid;
             margin-bottom: 20px;
-            background-color: #faf0e6;                 /* 实色背景 */
+            background-color: #faf0e6;
             background-image: 
                 repeating-linear-gradient(
                     to bottom,
@@ -108,10 +104,8 @@
             padding-right: 10px;
             margin-top: 15px;
             font-size: 14px;
-            line-height: 24px;      /* 与横线间距一致 */
+            line-height: 24px;
             color: #3e2e1f;
-            position: relative;
-            z-index: 2;
             scrollbar-width: thin;
             scrollbar-color: #b58b6b #f0e0d0;
         }
