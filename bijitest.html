@@ -3,341 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>书影有鉴</title>
+    <title>漫游时间轴 - 书影有鉴</title>
     <style>
-        /* 全局样式重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Noto Serif SC', serif;
-            background-color: #f8f5f2;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        /* 卡片容器 */
-        .card {
-            width: 280px;
-            border-radius: 16px;
-            padding: 30px 20px;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-        }
-
-        /* 卡片标题 */
-        .card-title {
-            font-size: 28px;
-            font-weight: 600;
+            background-color: #9d8ca0; /* 与原图一致的紫色背景 */
             color: #f7e8c8; /* 金色文字 */
-            margin-bottom: 12px;
-            letter-spacing: 2px;
+            padding: 20px;
+            min-height: 100vh;
         }
-
-        /* 卡片副标题 */
-        .card-subtitle {
-            font-size: 16px;
-            color: rgba(247, 232, 200, 0.85);
-            margin-bottom: 24px;
-            font-weight: 300;
-        }
-
-        /* 手机模拟框 */
-        .phone-mockup {
-            width: 100%;
-            height: 480px;
-            background-color: rgba(255,255,255,0.1);
+        .timeline-page {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #9d8ca0;
             border-radius: 24px;
-            padding: 16px;
+            padding: 20px;
+            min-height: 800px;
             position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        /* 手机顶部刘海 */
-        .phone-mockup::before {
-            content: '';
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40%;
-            height: 24px;
-            background-color: #000;
-            border-radius: 0 0 12px 12px;
-        }
-
-        /* 各卡片背景色 */
-        .card-archive {
-            background: linear-gradient(135deg, #8a9a95, #6b7b76);
-        }
-        .card-timeline {
-            background: linear-gradient(135deg, #9d8ca0, #7a6a7d);
-        }
-        .card-memory {
-            background: linear-gradient(135deg, #5a8699, #4a7689);
-        }
-        .card-collection {
-            background: linear-gradient(135deg, #7a9182, #6a8172);
-        }
-
-        /* 个人档案库内容样式 */
-        .archive-content {
-            height: 100%;
+        /* 顶部栏 */
+        .page-header {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
-        .archive-sidebar {
+        .header-date {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1;
+        }
+        .header-week {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+        .header-icons {
+            display: flex;
+            gap: 24px;
+        }
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            stroke: #f7e8c8;
+            stroke-width: 2;
+            fill: none;
+        }
+        /* 时间轴容器 */
+        .timeline-container {
+            position: relative;
+        }
+        /* 时间轴竖线 */
+        .timeline-line {
             position: absolute;
-            right: 0;
+            left: 40px;
             top: 0;
             bottom: 0;
-            width: 60px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            width: 1px;
+            background-color: rgba(247, 232, 200, 0.3);
         }
-        .sidebar-item {
-            flex: 1;
-            opacity: 0.6;
-        }
-        .sidebar-item:nth-child(1) { background-color: #a8c1d1; }
-        .sidebar-item:nth-child(2) { background-color: #8a9fb0; }
-        .sidebar-item:nth-child(3) { background-color: #b08a9f; }
-        .archive-footer {
-            font-size: 24px;
-            color: #f7e8c8;
-            opacity: 0.8;
-        }
-
-        /* 漫游时间轴内容样式 */
+        /* 时间轴项 */
         .timeline-item {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            font-size: 14px;
+            margin-bottom: 24px;
+            position: relative;
         }
         .timeline-time {
-            color: #f7e8c8;
-            opacity: 0.7;
-            min-width: 40px;
+            width: 80px;
+            font-size: 20px;
+            font-weight: 500;
+            padding-top: 4px;
+        }
+        .timeline-time small {
+            display: block;
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 2px;
+        }
+        .timeline-content {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .timeline-info {
+            flex: 1;
         }
         .timeline-title {
-            flex: 1;
-            color: #fff;
-        }
-        .timeline-cover {
-            width: 40px;
-            height: 56px;
-            border-radius: 4px;
-            object-fit: cover;
-        }
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            color: #f7e8c8;
-        }
-
-        /* 数字记忆馆内容样式 */
-        .memory-cover {
-            width: 100%;
-            height: 200px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            object-fit: cover;
-        }
-        .memory-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: #f7e8c8;
+            font-size: 20px;
+            font-weight: 500;
             margin-bottom: 8px;
         }
-        .memory-subtitle {
+        .timeline-desc {
             font-size: 12px;
-            color: rgba(247, 232, 200, 0.7);
+            opacity: 0.7;
             margin-bottom: 12px;
         }
-        .memory-stars {
-            color: #f7e8c8;
-            margin-bottom: 12px;
-        }
-        .memory-desc {
-            font-size: 11px;
-            line-height: 1.5;
-            color: rgba(255,255,255,0.8);
-        }
-
-        /* 清单博物馆内容样式 */
-        .collection-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .collection-info {
-            flex: 1;
-        }
-        .collection-title {
+        .timeline-stars {
             font-size: 14px;
-            color: #fff;
-            margin-bottom: 4px;
+            color: #f7e8c8;
         }
-        .collection-date {
-            font-size: 11px;
-            color: rgba(247, 232, 200, 0.7);
-        }
-        .collection-cover {
-            width: 40px;
-            height: 56px;
+        .timeline-cover {
+            width: 80px;
+            height: 112px;
             border-radius: 4px;
             object-fit: cover;
+            margin-left: 12px;
         }
-        .collection-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            color: #f7e8c8;
-        }
+        /* 引入字体 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&display=swap');
     </style>
-    <!-- 引入中文字体 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 个人档案库 -->
-    <div class="card card-archive">
-        <h1 class="card-title">个人档案库</h1>
-        <p class="card-subtitle">读书、观影、游戏、漫画</p>
-        <div class="phone-mockup">
-            <div class="archive-content">
-                <div style="font-size: 12px; color: rgba(247,232,200,0.7);">目录</div>
-                <div style="text-align: center; margin: 20px 0;">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f7e8c8" stroke-width="1.5">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                    </svg>
-                </div>
-                <div class="archive-sidebar">
-                    <div class="sidebar-item"></div>
-                    <div class="sidebar-item"></div>
-                    <div class="sidebar-item"></div>
-                </div>
-                <div class="archive-footer">22</div>
+    <div class="timeline-page">
+        <!-- 顶部栏 -->
+        <div class="page-header">
+            <div>
+                <span class="header-date">19</span>
+                <span class="header-week">星期四</span>
+            </div>
+            <div class="header-icons">
+                <svg class="header-icon" viewBox="0 0 24 24">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <svg class="header-icon" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
             </div>
         </div>
-    </div>
 
-    <!-- 漫游时间轴 -->
-    <div class="card card-timeline">
-        <h1 class="card-title">漫游时间轴</h1>
-        <p class="card-subtitle">记录每一次观看</p>
-        <div class="phone-mockup">
-            <div class="timeline-header">
-                <span style="font-size: 24px;">19</span>
-                <div style="display: flex; gap: 12px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f7e8c8" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f7e8c8" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <span class="timeline-time">08.16</span>
-                <div class="timeline-title">哈尔的移动城堡</div>
-                <img src="https://picsum.photos/40/56?random=1" class="timeline-cover" alt="哈尔的移动城堡">
-            </div>
-            <div class="timeline-item">
-                <span class="timeline-time">08.16</span>
-                <div class="timeline-title">流浪地球2</div>
-                <img src="https://picsum.photos/40/56?random=2" class="timeline-cover" alt="流浪地球2">
-            </div>
-            <div class="timeline-item">
-                <span class="timeline-time">08.16</span>
-                <div class="timeline-title">绿皮书</div>
-                <img src="https://picsum.photos/40/56?random=3" class="timeline-cover" alt="绿皮书">
-            </div>
-            <div class="timeline-item">
-                <span class="timeline-time">08.16</span>
-                <div class="timeline-title">庆余年</div>
-                <img src="https://picsum.photos/40/56?random=4" class="timeline-cover" alt="庆余年">
-            </div>
-        </div>
-    </div>
+        <!-- 时间轴 -->
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
 
-    <!-- 数字记忆馆 -->
-    <div class="card card-memory">
-        <h1 class="card-title">数字记忆馆</h1>
-        <p class="card-subtitle">更有温度的记录</p>
-        <div class="phone-mockup">
-            <img src="https://picsum.photos/240/200?random=5" class="memory-cover" alt="HADES">
-            <div class="memory-title">HADES</div>
-            <div class="memory-subtitle">2021年度最佳游戏</div>
-            <div class="memory-stars">★★★★★</div>
-            <div class="memory-desc">
-                《Hades》是一款由 Supergiant Games 开发的 roguelike 动作游戏。玩家将在古希腊神话世界中扮演扎格柔斯，试图逃离冥界并向父亲哈迪斯证明自己的价值。游戏拥有独特的叙事结构和丰富的角色养成系统。
+            <!-- 哈尔的移动城堡 -->
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    08.16
+                    <small>周日</small>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-info">
+                        <div class="timeline-title">哈尔的移动城堡</div>
+                        <div class="timeline-desc">宫崎骏 | 动画 | 奇幻 | 冒险</div>
+                        <div class="timeline-stars">★★★★☆</div>
+                    </div>
+                    <img src="https://picsum.photos/id/237/80/112" class="timeline-cover" alt="哈尔的移动城堡">
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- 清单博物馆 -->
-    <div class="card card-collection">
-        <h1 class="card-title">清单博物馆</h1>
-        <p class="card-subtitle">打造自己的精神主题馆</p>
-        <div class="phone-mockup">
-            <div class="collection-header">
-                <span style="font-size: 24px;">3</span>
-            </div>
-            <div class="collection-item">
-                <div class="collection-info">
-                    <div class="collection-title">大刘的科幻宇宙</div>
-                    <div class="collection-date">2024年1月8日创建</div>
+            <!-- 流浪地球2 -->
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    08.16
+                    <small>周日</small>
                 </div>
-                <img src="https://picsum.photos/40/56?random=6" class="collection-cover" alt="三体">
-            </div>
-            <div class="collection-item">
-                <div class="collection-info">
-                    <div class="collection-title">哈利波特全集</div>
-                    <div class="collection-date">2024年1月6日创建</div>
+                <div class="timeline-content">
+                    <div class="timeline-info">
+                        <div class="timeline-title">流浪地球2</div>
+                        <div class="timeline-desc">郭帆 | 科幻 | 灾难 | 冒险</div>
+                        <div class="timeline-stars">★★★★★</div>
+                    </div>
+                    <img src="https://picsum.photos/id/1/80/112" class="timeline-cover" alt="流浪地球2">
                 </div>
-                <img src="https://picsum.photos/40/56?random=7" class="collection-cover" alt="哈利波特">
             </div>
-            <div class="collection-item">
-                <div class="collection-info">
-                    <div class="collection-title">阿多尼斯代表作</div>
-                    <div class="collection-date">2024年1月2日创建</div>
+
+            <!-- 绿皮书 -->
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    08.16
+                    <small>周日</small>
                 </div>
-                <img src="https://picsum.photos/40/56?random=8" class="collection-cover" alt="我的孤独是一座花园">
+                <div class="timeline-content">
+                    <div class="timeline-info">
+                        <div class="timeline-title">绿皮书</div>
+                        <div class="timeline-desc">彼得·法雷里 | 剧情 | 喜剧 | 传记</div>
+                        <div class="timeline-stars">★★★★★</div>
+                    </div>
+                    <img src="https://picsum.photos/id/25/80/112" class="timeline-cover" alt="绿皮书">
+                </div>
             </div>
-            <div class="collection-item">
-                <div class="collection-info">
-                    <div class="collection-title">我的江湖</div>
-                    <div class="collection-date">2018年1月20日创建</div>
+
+            <!-- 庆余年 -->
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    08.16
+                    <small>周日</small>
                 </div>
-                <img src="https://picsum.photos/40/56?random=9" class="collection-cover" alt="金庸作品">
+                <div class="timeline-content">
+                    <div class="timeline-info">
+                        <div class="timeline-title">庆余年</div>
+                        <div class="timeline-desc">孙皓 | 古装 | 权谋 | 喜剧</div>
+                        <div class="timeline-stars">★★★★☆</div>
+                    </div>
+                    <img src="https://picsum.photos/id/106/80/112" class="timeline-cover" alt="庆余年">
+                </div>
             </div>
         </div>
     </div>
