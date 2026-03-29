@@ -1,377 +1,245 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黄子弘凡 · 图鉴 · 磨砂版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>玻璃画廊 | 内描边 | 半透图片 | 倾斜堆叠</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --c-00: #ffffff;
-            --c-22: #dbdbdb;
-            --c-66: #b3b3b3;
-            --c-99: #707070;
-            --c-ff: #222222;
-            --p-main: #FF8A5C;
-            --p-hover: #FF6B6B;
-            --p-weak: #FFD93D20;
-            --s-1: #2d2e2f;
-            --s-1-hover: #323434;
-            --radius-12: 12px;
-            --radius-16: 16px;
-            --space-16: 16px;
-            --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.12);
+            user-select: none;
         }
 
         body {
-            background: linear-gradient(145deg, #0a0f14, #1a1f24);
+            background: #f8f9fa;
             min-height: 100vh;
-            padding: 30px 20px;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            color: var(--c-22);
-        }
-
-        .gallery-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--p-weak);
+            justify-content: center;
+            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+            overflow: hidden;
         }
 
-        h1 {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 28px;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #FFD93D, #FF8A5C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .layout-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .layout-btn {
-            background: var(--s-1);
-            border: none;
-            border-radius: 40px;
-            padding: 10px 24px;
-            color: var(--c-22);
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .layout-btn:hover {
-            background: var(--s-1-hover);
-        }
-
-        .layout-btn.active {
-            background: var(--p-main);
-            color: var(--c-ff);
-        }
-
-        .card-container {
+        .scene {
             position: relative;
             width: 100%;
-            min-height: 500px;
+            height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            perspective: 1200px;
+            justify-content: center;
         }
 
-        .card {
-            width: 220px;
-            height: 280px;
+        .stack {
             position: relative;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            transform-style: preserve-3d;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin: 10px;
-            background: var(--s-1);
-            border-radius: var(--radius-16);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            width: 800px;
+            height: 600px;
+            will-change: transform;
+            transform: skewY(15deg);
         }
 
-        .card:hover {
-            transform: rotateY(180deg);
-            box-shadow: 0 25px 50px -12px rgba(255, 107, 107, 0.5);
-        }
-
-        .card .front, .card .back {
+        /* 玻璃卡片样式 + 内描边（右边+上边） */
+        .card {
             position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 300px;
+            height: 200px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            will-change: transform;
+            background: rgba(255, 255, 255, 0.1);
+            /* 外阴影保留，内描边通过 inset 阴影实现（右边和上边） */
+            box-shadow: inset -4px 0 0 rgba(0, 0, 0, 0.6), inset 0 4px 0 rgba(0, 0, 0, 0.6), 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .card img {
+            display: block;
             width: 100%;
             height: 100%;
-            border-radius: var(--radius-16);
-            backface-visibility: hidden;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .card .front {
-            background: linear-gradient(145deg, #2a3238, #1a2126);
-        }
-
-        .card .front img {
-            width: 100%;
-            height: 160px;
             object-fit: cover;
-            border-radius: var(--radius-12);
-            margin-bottom: 15px;
+            opacity: 0.65;
+            filter: saturate(1.3) contrast(1.05);
         }
 
-        .card .front .title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
-            color: #FFD93D;
-        }
-
-        .card .back {
-            transform: rotateY(180deg);
-            background: var(--p-main);
-            color: var(--c-ff);
-        }
-
-        .card .back p {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* 行布局 */
-        .layout-row {
-            overflow-x: auto;
-            display: flex;
-            gap: 25px;
-            padding: 20px 10px;
-            scroll-snap-type: x mandatory;
-        }
-        .layout-row .card {
-            scroll-snap-align: start;
-        }
-
-        /* 圆环布局 - 通过JS动态设置transform，所以这里只保留基础 */
-        .layout-circle .card {
-            margin: 0; /* 移除margin，由JS控制绝对定位 */
+        .card-text {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 180px;
-            height: 220px;
-            margin-left: -90px;
-            margin-top: -110px;
-            transition: transform 0.3s ease; /* 平滑拖拽 */
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: #222;
+            font-size: 16px;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,240,0.6);
+            backdrop-filter: blur(4px);
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            width: auto;
+            max-width: calc(100% - 40px);
+            pointer-events: none;
+            z-index: 2;
         }
 
-        /* 3D队列布局 */
-        .layout-3d {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transform-style: preserve-3d;
-            transform: rotateX(5deg) rotateY(0deg);
+        .vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(transparent 50%, rgba(0, 0, 0, 0.02) 100%);
+            z-index: 2;
         }
-        .layout-3d .card:nth-child(1) { transform: scale(1.2) translateZ(50px); }
-        .layout-3d .card:nth-child(2) { transform: scale(1.0) translateZ(0); }
-        .layout-3d .card:nth-child(3) { transform: scale(0.9) translateZ(-30px); }
-        .layout-3d .card:nth-child(4) { transform: scale(0.8) translateZ(-60px); }
-        .layout-3d .card:nth-child(5) { transform: scale(0.7) translateZ(-90px); }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 20px; }
-            .layout-btn { font-size: 12px; padding: 8px 16px; }
-            .layout-circle { width: 300px; height: 300px; }
+        .logo {
+            position: fixed;
+            top: 24px;
+            left: 28px;
+            z-index: 10;
+            opacity: 0.8;
+            font-weight: 500;
+            font-size: 20px;
+            color: #4a4a4a;
+            background: rgba(255,255,240,0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 40px;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 12px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @media (max-width: 680px) {
+            .card {
+                width: 260px;
+                height: 173px;
+            }
+            .stack {
+                transform: scale(0.85) skewY(15deg);
+                transform-origin: center;
+            }
+            .card-text {
+                font-size: 13px;
+                bottom: 12px;
+                left: 12px;
+            }
+            /* 小屏幕下内描边厚度适当减薄 */
+            .card {
+                box-shadow: inset -3px 0 0 rgba(0, 0, 0, 0.6), inset 0 3px 0 rgba(0, 0, 0, 0.6), 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="gallery-container">
-        <div class="header">
-            <h1 class="缝合像素字型 12px Mono">🖼️ 图鉴 · 磨砂版</h1>
-            <div class="layout-buttons">
-                <button class="layout-btn active" data-layout="row">一行排列</button>
-                <button class="layout-btn" data-layout="circle">圆环排列</button>
-                <button class="layout-btn" data-layout="3d">3D队列</button>
-            </div>
-        </div>
+    <div class="vignette"></div>
+    <div class="logo">◈ 内描边玻璃画廊 ◈</div>
+    <div class="hint">🖱️ 滚轮 — 沿阶梯方向移动 | ✨ 悬停 — 向右抽出 | 右边+上边黑色内描边</div>
 
-        <div class="card-container" id="cardContainer">
-            <!-- 卡片由JS生成 -->
-        </div>
+    <div class="scene">
+        <div class="stack" id="cardStack"></div>
     </div>
 
     <script>
-        (function() {
-            const cardsData = [
-                { img: 'https://via.placeholder.com/220x160/FFD93D/000?text=舞台', title: '2025演唱会', desc: '北京站 · 元与均棋' },
-                { img: 'https://via.placeholder.com/220x160/FF8A5C/000?text=杂志', title: '费加罗', desc: '12月刊 · 复古大片' },
-                { img: 'https://via.placeholder.com/220x160/FF6B6B/000?text=生日', title: '2026生日会', desc: '粉丝合影 · 直播截图' },
-                { img: 'https://via.placeholder.com/220x160/FFD93D/000?text=活动', title: '品牌发布会', desc: '上海 · 品牌挚友' },
-                { img: 'https://via.placeholder.com/220x160/FF8A5C/000?text=日常', title: '后台花絮', desc: '彩排瞬间 · 笑容灿烂' }
-            ];
+        const cardsData = [
+            { title: "雾中的孤独", query: "misty fjord morning fog dramatic moody landscape photography minimalist gray tones serene water reflection soft diffused light wide panoramic view fine art" },
+            { title: "玻璃大教堂", query: "modern glass architecture building facade reflections abstract minimalist geometric patterns wide angle contemporary architecture photography clean sky fine art" },
+            { title: "城市阴影", query: "tokyo night street rain reflections neon lights moody atmospheric wide urban photography cinematic dark dramatic japanese city panoramic" },
+            { title: "最后的光芒", query: "portrait photography golden hour side light dramatic shadows moroccan desert warm tones wide shot atmospheric fine art cinematic landscape human figure" },
+            { title: "矿物蓝", query: "iceland glacier lake blue ice abstract texture cold minimalist ethereal aerial water patterns wide panoramic monochromatic fine art nature photography" },
+            { title: "具体的梦想", query: "brutalist concrete architecture dramatic shadows geometric forms wide minimalist modern building interior fine art photography stark light raw texture horizontal" },
+            { title: "漂浮森林", query: "misty pine forest mountain ethereal fog dreamy soft light wide landscape fine art chinese nature photography layers depth serene minimal panoramic" },
+            { title: "沙漠几何", query: "sahara desert sand dunes abstract curves shadows golden light minimalist wide geometric fine art landscape photography warm tones graphic panoramic" },
+            { title: "雨后", query: "shanghai rainy street night reflections puddle mirror effect wide moody atmospheric urban photography lights blurred cinematic color street scene horizontal" },
+            { title: "安静室", query: "japanese zen garden kyoto minimalist interior wide room soft window light serene traditional architecture fine art photography calm neutral tones horizontal" },
+            { title: "态域", query: "abstract industrial macro photography geometric circles metallic textures dark moody conceptual fine art long exposure concentric patterns dramatic wide" },
+            { title: "脉冲", query: "new york subway wide shot dramatic light cinematic moody street photography contemplative urban life fine art black and white horizontal scene" },
+            { title: "盐滩", query: "uyuni salt flats bolivia mirror reflection sky minimalist dramatic wide landscape person silhouette infinite horizon fine art photography ethereal surreal" },
+            { title: "骨白", query: "santorini white architecture blue dome minimalist mediterranean light wide angle geometric forms fine art travel photography greek island bright airy panoramic" }
+        ];
 
-            const container = document.getElementById('cardContainer');
-            const buttons = document.querySelectorAll('.layout-btn');
-            let currentLayout = 'row';
+        // 生成稳定图片链接 (picsum)
+        const imageUrls = [];
+        for (let i = 1; i <= cardsData.length; i++) {
+            imageUrls.push(`https://picsum.photos/id/${(100 + i) % 300 + 1}/560/380`);
+        }
 
-            // 圆环拖拽相关变量
-            let isDragging = false;
-            let startX = 0;
-            let currentAngle = 0; // 当前旋转偏移（弧度）
-            let lastAngle = 0;    // 记录拖拽开始时的角度
-            const radius = 200;    // 圆环半径
+        const OFFSET_X = 48;
+        const OFFSET_Y = -40;
+        const DIR_X = OFFSET_X;
+        const DIR_Y = OFFSET_Y;
 
-            function renderCards() {
-                let html = '';
-                cardsData.forEach((item, index) => {
-                    html += `
-                        <div class="card" data-index="${index}">
-                            <div class="front">
-                                <img src="${item.img}" alt="${item.title}">
-                                <div class="title">${item.title}</div>
-                            </div>
-                            <div class="back">
-                                <p>${item.desc}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-                return html;
-            }
+        const container = document.getElementById('cardStack');
 
-            container.innerHTML = renderCards();
+        cardsData.forEach((card, index) => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            const translateX = index * OFFSET_X;
+            const translateY = index * OFFSET_Y;
+            const baseTransform = `translateX(${translateX}px) translateY(${translateY}px)`;
+            div.style.transform = baseTransform;
+            div.style.zIndex = cardsData.length - index;
 
-            // 应用圆环布局，接受偏移角度 offset (弧度)
-            function applyCircleLayout(offset = 0) {
-                const cards = document.querySelectorAll('.card');
-                const total = cards.length;
-                const angleStep = (2 * Math.PI) / total;
-                cards.forEach((card, i) => {
-                    const angle = i * angleStep + offset;
-                    const x = Math.cos(angle) * radius;
-                    const z = Math.sin(angle) * radius;
-                    // 让卡片始终面向圆心？这里简单旋转使卡片正面朝外（可选）
-                    // 如果希望卡片始终面向圆心，可以加上 rotateY(angle) 但会和hover冲突
-                    // 这里只做位置移动，保留卡片自身翻转
-                    card.style.transform = `translateX(${x}px) translateZ(${z}px)`;
-                });
-                currentAngle = offset; // 记录当前角度
-            }
+            const img = document.createElement('img');
+            img.src = imageUrls[index];
+            img.alt = card.title;
+            img.loading = "lazy";
+            div.appendChild(img);
 
-            // 清除所有卡片的内联样式（用于切换布局）
-            function clearCardStyles() {
-                const cards = document.querySelectorAll('.card');
-                cards.forEach(card => {
-                    card.style.transform = '';
-                    card.style.position = '';
-                });
-            }
+            const textSpan = document.createElement('div');
+            textSpan.className = 'card-text';
+            textSpan.innerText = card.title;
+            div.appendChild(textSpan);
 
-            // 切换布局
-            function switchLayout(layout) {
-                container.classList.remove('layout-row', 'layout-circle', 'layout-3d');
-                clearCardStyles();
-                container.classList.add(`layout-${layout}`);
+            container.appendChild(div);
 
-                if (layout === 'circle') {
-                    // 重置旋转角度
-                    currentAngle = 0;
-                    lastAngle = 0;
-                    applyCircleLayout(0);
-                    // 添加拖拽监听
-                    enableDrag(true);
-                } else {
-                    // 禁用拖拽
-                    enableDrag(false);
-                }
-
-                buttons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.layout === layout) btn.classList.add('active');
-                });
-                currentLayout = layout;
-            }
-
-            // 拖拽事件处理
-            let dragEnabled = false;
-
-            function enableDrag(enable) {
-                if (enable === dragEnabled) return;
-                dragEnabled = enable;
-                if (enable) {
-                    container.addEventListener('mousedown', onDragStart);
-                    window.addEventListener('mousemove', onDragMove);
-                    window.addEventListener('mouseup', onDragEnd);
-                } else {
-                    container.removeEventListener('mousedown', onDragStart);
-                    window.removeEventListener('mousemove', onDragMove);
-                    window.removeEventListener('mouseup', onDragEnd);
-                }
-            }
-
-            function onDragStart(e) {
-                if (currentLayout !== 'circle') return;
-                isDragging = true;
-                startX = e.clientX;
-                lastAngle = currentAngle;
-                container.style.cursor = 'grabbing';
-                // 临时禁止卡片hover翻转？不需要，因为拖拽时hover也会触发，但可接受
-                e.preventDefault(); // 防止选中文本
-            }
-
-            function onDragMove(e) {
-                if (!isDragging || currentLayout !== 'circle') return;
-                const deltaX = e.clientX - startX;
-                // 灵敏度：每移动100px旋转半圈？这里调小一点
-                const angleDelta = deltaX * 0.01; // 弧度
-                currentAngle = lastAngle + angleDelta;
-                applyCircleLayout(currentAngle);
-            }
-
-            function onDragEnd(e) {
-                if (currentLayout !== 'circle') return;
-                isDragging = false;
-                container.style.cursor = '';
-                // 可以添加惯性，暂不实现
-            }
-
-            // 初始化按钮点击
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const layout = e.target.dataset.layout;
-                    switchLayout(layout);
-                });
+            div.addEventListener('mouseenter', () => {
+                div.style.transform = `${baseTransform} translateX(200px)`;
             });
+            div.addEventListener('mouseleave', () => {
+                div.style.transform = baseTransform;
+            });
+        });
 
-            // 默认激活行布局
-            switchLayout('row');
-        })();
+        const stackDiv = document.querySelector('.stack');
+        let targetDistance = 0;
+        let currentDistance = 0;
+        const STEP = 20;
+        const EASING = 0.35;
+
+        const len = Math.hypot(DIR_X, DIR_Y);
+        const normX = DIR_X / len;
+        const normY = DIR_Y / len;
+
+        function animate() {
+            currentDistance += (targetDistance - currentDistance) * EASING;
+            const dx = currentDistance * normX;
+            const dy = currentDistance * normY;
+            stackDiv.style.transform = `skewY(15deg) translate3d(${dx}px, ${dy}px, 0)`;
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 1 : -1;
+            targetDistance += delta * STEP;
+            targetDistance = Math.min(800, Math.max(-800, targetDistance));
+        }, { passive: false });
+
+        animate();
     </script>
 </body>
 </html>
